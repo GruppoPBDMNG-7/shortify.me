@@ -1,4 +1,4 @@
-package me.shortify.utils;
+package me.shortify.utils.shortenerUrl;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
