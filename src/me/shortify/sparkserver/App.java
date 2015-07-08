@@ -6,14 +6,21 @@ import static spark.Spark.post;
 
 import java.util.Calendar;
 
+import me.shortify.dao.CassandraDAO;
+import me.shortify.utils.geoLocation.CountryIPInformation;
+import me.shortify.utils.shortenerUrl.Algorithm;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.maxmind.geoip2.exception.AddressNotFoundException;
+
 public class App {
-	
-    public static void main( String[] args ) {
+
+	public static void main( String[] args ) {
     	
-    	/*post("/convert", (request, response) -> {
+    	//creazione di uno short url
+    	post(API.CONVERT, (request, response) -> {
     		
     		String json = request.body();
     		System.out.println("Parametro passato: " + json) ;
@@ -38,17 +45,19 @@ public class App {
     		if(customText == "") { 
     			
 	    		//conversione dell'url
-	    		//shortUrl = Converter.convert(url);
+	    		shortUrl = Algorithm.buildShortUrl(url);
 	    		jsonObject = new JSONObject();
+	    		
+	    		System.out.println("Risultato conversione: " + shortUrl);
 	    		
     		} else {
     			
-    			//controlli richiesti
-    			//shortUrl = Converter.insertCustomUrl(url, customText);
+    			//TODO controlli richiesti
+    			shortUrl = customText;
+    			
+    			System.out.println("Custom Text inserito: " + shortUrl);
     		}
-    		
-    		System.out.println("Risultato conversione: " + shortUrl);
-    		
+    				
     		if (!d.checkUrl(shortUrl)) {
     			d.putUrl(shortUrl, url);
     			
@@ -61,24 +70,44 @@ public class App {
     		}
     			
     	    return jsonObject.toString();
-    	});*/
+    	});
     	
     	
+    	//visita di uno short url
     	get("/:goto", (request, response) -> {
     		String shortUrl = request.params(":goto"); 
-		
+    		String ip = request.ip();
+    		String country = "";
     		System.out.println("Valore di shortUrl: " + shortUrl);
     		
-    		//CassandraDAO d = new CassandraDAO();	
-    		//String longUrl = d.getUrl(shortUrl, "IT", request.ip(), Calendar.getInstance());
+    		CountryIPInformation cIPi = new CountryIPInformation();
+    		cIPi.setDataIP(ip);
     		
-    		//System.out.println("Long Url:" + longUrl);
+    		try {
+    			country = cIPi.getCountry();
+    		} catch (AddressNotFoundException e) {
+    			country = "NULL";
+    		}
     		
-    		//response.redirect(longUrl);
+    		CassandraDAO d = new CassandraDAO();	
+    		String longUrl = d.getUrl(shortUrl, country, ip, Calendar.getInstance());
+    		
+    		System.out.println("IP: " + ip);
+    		System.out.println("Country: " +  country);
+    		System.out.println("Long Url:" + longUrl);
+    		
+    		if (longUrl != "") {  		
+    			response.redirect(longUrl);   		
+    		} else {
+    			response.redirect("/404.html");
+    		}
+    		
     	    return null;
     	});
     	
     	
+    	
+    	//opzioni per i test in locale
     	options("/*", (request,response)->{
 
     	    String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
