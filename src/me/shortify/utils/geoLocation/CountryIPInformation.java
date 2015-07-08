@@ -31,7 +31,7 @@ public class CountryIPInformation {
 		public CountryIPInformation() throws IOException, URISyntaxException{ 
 			//TODO Verificare se il path rimane costantemente corretto in questa formula cambiando 
 			//ambiente di lavoro
-			database = new File(System.getProperty("user.dir")+"/src/me/shortify/utils/GeoLite2-Country.mmdb");			
+			database = new File(System.getProperty("user.dir")+"/src/me/shortify/utils/geoLocation/GeoLite2-Country.mmdb");			
 			reader = new DatabaseReader.Builder(database).build();
 		}
 		

@@ -7,9 +7,9 @@ import org.apache.commons.codec.binary.Base64;
 
 public class Algorithm {
 	
-	private final int HASHLENGTH = 8;	
+	private static final int HASHLENGTH = 8;	
 	
-	public String buildShortUrl(String url){
+	public static String buildShortUrl(String url){
 		
 		String strUrl = url;
 		Random rnd = new Random();	
