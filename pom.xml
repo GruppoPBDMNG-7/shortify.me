@@ -43,6 +43,13 @@
 	 	 <artifactId>cassandra-driver-core</artifactId>
 	 	 <version>2.1.5</version>
 	</dependency>
+	
+	<dependency>
+	<groupId>com.maxmind.geoip2</groupId>
+	<artifactId>geoip2</artifactId>
+	<version>2.3.0</version>
+	</dependency>
+	
 
 	
   </dependencies>
