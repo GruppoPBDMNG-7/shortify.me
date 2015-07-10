@@ -1,4 +1,5 @@
 package me.shortify.sparkserver;
+
 import static spark.Spark.before;
 import static spark.Spark.get;
 import static spark.Spark.options;
@@ -15,12 +16,18 @@ import org.json.JSONObject;
 
 import com.maxmind.geoip2.exception.AddressNotFoundException;
 
-public class App {
-
-	public static void main( String[] args ) {
-    	
-    	//creazione di uno short url
-    	post(API.CONVERT, (request, response) -> {
+public class Services {
+	private static final String API_CONTEXT = "/api/v1";
+	
+	public static void setupEndpoints() {	
+		setConversione();
+    	setVisitaShortUrl();    
+    	setOpzioni();
+    }
+	
+	
+	private static void setConversione() {
+		post(API_CONTEXT + API.CONVERT, (request, response) -> {
     		
     		String json = request.body();
     		System.out.println("Parametro passato: " + json) ;
@@ -64,16 +71,15 @@ public class App {
     			//json con short url
         		jsonObject.put("shortUrl", shortUrl);
     		} else {
-    			
-    			//json con messaggio di errore
-    			jsonObject.put("error", "An error occured!");
+    			System.out.println("ShortUrl già presente nel DB");
+    			response.status(401);
     		}
     			
     	    return jsonObject.toString();
     	});
-    	
-    	
-    	//visita di uno short url
+	}
+	
+	private static void setVisitaShortUrl() {
     	get("/:goto", (request, response) -> {
     		String shortUrl = request.params(":goto"); 
     		String ip = request.ip();
@@ -104,10 +110,9 @@ public class App {
     		
     	    return null;
     	});
-    	
-    	
-    	
-    	//opzioni per i test in locale
+	}
+
+	private static void setOpzioni() {
     	options("/*", (request,response)->{
 
     	    String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
@@ -126,5 +131,5 @@ public class App {
     	before((request,response)->{
     	    response.header("Access-Control-Allow-Origin", "*");
     	});
-    }
+	}
 }
