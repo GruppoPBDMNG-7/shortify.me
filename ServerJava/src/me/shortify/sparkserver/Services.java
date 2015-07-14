@@ -92,10 +92,9 @@ public class Services {
     		System.out.println("Valore di shortUrl: " + shortUrl);
     		
     		CountryIPInformation cIPi = new CountryIPInformation();
-    		cIPi.setDataIP(ip);
     		
     		try {
-    			country = cIPi.getCountry();
+    			country = cIPi.getCountry(ip);
     		} catch (AddressNotFoundException e) {
     			country = "NULL";
     		}
