@@ -43,7 +43,7 @@ public class CassandraDAO implements DAO{
 				+ CassandraSchema.URLS_SHORT_URL_COLUMN + " = '" + shortUrl + "';");
 		
 		try {
-			//Se c'è almeno una riga viene eseguito, quindi l'url esiste gi�
+			//Se c'e' almeno una riga viene eseguito, quindi l'url esiste gia'
 			for (Row r : rs) {
 				exists = true;
 			}
@@ -122,8 +122,8 @@ public class CassandraDAO implements DAO{
 		List<Row> rows = rs.all();
 		
 		if (rows.size() == 0) {
-			/*Se l'ip non è stato trovato allora verrà inserito, e il contatore
-			  verrà incrementato */
+			/*Se l'ip non e' stato trovato allora verra'� inserito, e il contatore
+			  verra'� incrementato */
 			session.execute("UPDATE " + CassandraSchema.UNIQUE_COUNTER_TABLE
 					+ " SET " + CassandraSchema.UC_VALUE_COLUMN + " = " 
 					+ CassandraSchema.UC_VALUE_COLUMN + " + 1 WHERE " 
