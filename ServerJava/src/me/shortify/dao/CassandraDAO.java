@@ -62,23 +62,12 @@ public class CassandraDAO implements DAO{
 				+ "VALUES ('" + shortUrl + "', '" + longUrl + "');");
 	}
 	
-	public String getUrl(String shortUrl, String country, String ip, Calendar date) {
-		String longUrl = "";
-		
-		ResultSet rs = session.execute("SELECT * FROM " 
-				+ CassandraSchema.URLS_TABLE + " WHERE " 
-				+ CassandraSchema.URLS_SHORT_URL_COLUMN + " = '" + shortUrl + "';");
-		
-		for (Row r : rs) {
-			longUrl = r.getString(CassandraSchema.URLS_LONG_URL_COLUMN);
-		}
-
+	@Override
+	public void updateUrlStatistics(String shortUrl, String country, String ip, Calendar date) {
 		updateCountryCounter(shortUrl, country);
 		updateDayCounter(shortUrl, date);
 		updateHourCounter(shortUrl, date);		
-		updateUniqueCounter(shortUrl, ip);
-		
-		return longUrl;
+		updateUniqueCounter(shortUrl, ip);		
 	}
 	
 	private void updateCountryCounter(String shortUrl, String country) {
@@ -182,5 +171,20 @@ public class CassandraDAO implements DAO{
 		}
 		
 		return new Statistics(mCountry, mDay, mHour, unique);
+	}
+
+	@Override
+	public String getUrl(String shortUrl) {
+		String longUrl = "";
+		
+		ResultSet rs = session.execute("SELECT * FROM " 
+				+ CassandraSchema.URLS_TABLE + " WHERE " 
+				+ CassandraSchema.URLS_SHORT_URL_COLUMN + " = '" + shortUrl + "';");
+		
+		for (Row r : rs) {
+			longUrl = r.getString(CassandraSchema.URLS_LONG_URL_COLUMN);
+		}
+		
+		return longUrl;
 	}
 }
