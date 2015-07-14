@@ -101,7 +101,7 @@ public class Services {
     		}
     		
     		CassandraDAO d = new CassandraDAO();	
-    		String longUrl = d.getUrl(shortUrl, country, ip, Calendar.getInstance());
+    		String longUrl = d.getUrl(shortUrl);
     		
     		System.out.println("IP: " + ip);
     		System.out.println("Country: " +  country);
@@ -112,6 +112,8 @@ public class Services {
     		} else {
     			response.status(404);
     		}
+    		
+    		d.updateUrlStatistics(shortUrl, country, ip, Calendar.getInstance());
     		
     	    return null;
     	});
