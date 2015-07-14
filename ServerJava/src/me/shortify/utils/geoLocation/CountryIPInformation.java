@@ -20,7 +20,6 @@ public class CountryIPInformation {
 
 		private DatabaseReader reader;
 		private File database ;
-		private InetAddress ipAddress;
 		
 		/**
 		 * Carico il file contenente il database con i range dei vari ip per nazione
@@ -35,30 +34,14 @@ public class CountryIPInformation {
 			reader = new DatabaseReader.Builder(database).build();
 		}
 		
-		/**
-		 * metto nel parametro ip, un indirizzo ip
-		 * @param ip
-		 * @throws IOException
-		 */
-		public void setDataIP(String ip) throws IOException{
-			
-			  ipAddress = InetAddress.getByName(ip.toLowerCase());
-		}
 		
-		public String getCountry() throws IOException, GeoIp2Exception{
+		public String getCountry(String ip) throws IOException, GeoIp2Exception{
 			
-			CountryResponse response = reader.country(ipAddress);
+			CountryResponse response = reader.country(InetAddress.getByName(ip.toLowerCase()));
 			Country country = response.getCountry();	
 			return country.getIsoCode();
 		}
-
-	  public static void main(String[] args) throws IOException, GeoIp2Exception, URISyntaxException {
-		
-		  CountryIPInformation cii = new CountryIPInformation();
-		  cii.setDataIP("80.181.140.244");	  
-		  System.out.println(cii.getCountry());	
 	
-	  }
 	
 
 }
