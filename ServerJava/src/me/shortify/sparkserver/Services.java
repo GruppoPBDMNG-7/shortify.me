@@ -4,6 +4,7 @@ import static spark.Spark.before;
 import static spark.Spark.get;
 import static spark.Spark.options;
 import static spark.Spark.post;
+import static spark.Spark.externalStaticFileLocation;
 
 import java.util.Calendar;
 
@@ -20,6 +21,10 @@ public class Services {
 	private static final String API_CONTEXT = "/api/v1";
 	
 	public static void setupEndpoints() {	
+		
+		//folder del client web
+		externalStaticFileLocation("/ClientAngular");
+		
 		setConversione();
     	setVisitaShortUrl();    
     	setOpzioni();
@@ -105,7 +110,7 @@ public class Services {
     		if (longUrl != "") {  		
     			response.redirect(longUrl);   		
     		} else {
-    			response.redirect("/404.html");
+    			response.status(404);
     		}
     		
     	    return null;
