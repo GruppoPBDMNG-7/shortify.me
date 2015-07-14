@@ -62,7 +62,7 @@ public class Services {
     			//TODO controlli richiesti
     			shortUrl = customText;
     			
-    			System.out.println("Custom Text inserito: " + shortUrl);
+    			System.out.println("Custom URL inserito: " + shortUrl);
     		}
     				
     		if (!d.checkUrl(shortUrl)) {
