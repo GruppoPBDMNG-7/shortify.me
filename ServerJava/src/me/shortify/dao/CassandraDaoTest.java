@@ -1,8 +1,6 @@
 package me.shortify.dao;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Map;
-import java.util.TimeZone;
 
 
 public class CassandraDaoTest {
