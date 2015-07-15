@@ -4,11 +4,12 @@ import static spark.Spark.before;
 import static spark.Spark.get;
 import static spark.Spark.options;
 import static spark.Spark.post;
-import static spark.Spark.externalStaticFileLocation;
+import static spark.SparkBase.externalStaticFileLocation;
 
 import java.util.Calendar;
 
 import me.shortify.dao.CassandraDAO;
+import me.shortify.utils.filter.Blacklist;
 import me.shortify.utils.geoLocation.CountryIPInformation;
 import me.shortify.utils.shortenerUrl.Algorithm;
 
@@ -19,6 +20,7 @@ import com.maxmind.geoip2.exception.AddressNotFoundException;
 
 public class Services {
 	private static final String API_CONTEXT = "/api/v1";
+	private static final int MAX_COUNT = 9;
 	
 	public static void setupEndpoints() {	
 		
@@ -41,44 +43,62 @@ public class Services {
     		//si ottiene il long url dalla richiesta
     		String url = jsonObject.getString("longurl");
     		
-    		String customText;
-    		String shortUrl = "";
-    		
-    		try {
-    			
-    			//se e' stato inserito un custom text
-    			customText = jsonObject.getString("customText");
-    		} catch(JSONException e) {
-    			customText = "";
-    		}
-    		
-    		CassandraDAO d = new CassandraDAO();
-    		
-    		if(customText == "") { 
-    			
-	    		//conversione dell'url
-	    		shortUrl = Algorithm.buildShortUrl(url);
-	    		jsonObject = new JSONObject();
-	    		
-	    		System.out.println("Risultato conversione: " + shortUrl);
-	    		
-    		} else {
-    			
-    			//TODO controlli richiesti
-    			shortUrl = customText;
-    			
-    			System.out.println("Custom URL inserito: " + shortUrl);
-    		}
-    				
-    		if (!d.checkUrl(shortUrl)) {
-    			d.putUrl(shortUrl, url);
-    			
-    			//json con short url
-        		jsonObject.put("shortUrl", shortUrl);
-    		} else {
-    			System.out.println("ShortUrl già presente nel DB");
+			Blacklist bl = new Blacklist();
+			
+    		if (!bl.badDomainFinder(url)) {
+    			String customText;
+        		String shortUrl = "";
+        		
+        		try {
+        			
+        			//se e' stato inserito un custom text
+        			customText = jsonObject.getString("customText");
+        		} catch(JSONException e) {
+        			customText = "";
+        		}
+        		
+        		CassandraDAO dao = new CassandraDAO();
+        		
+        		if(customText.equals("")) {  			
+        			int numTentativi = 0;
+        			
+        			do {
+    		    		//creazione dell'url
+    		    		shortUrl = Algorithm.buildShortUrl(url);
+    		    		numTentativi++;
+    		    		
+        			} while (dao.checkUrl(shortUrl) && numTentativi < MAX_COUNT);
+    	    		
+    	    		jsonObject = new JSONObject();    		
+    	    		System.out.println("Risultato conversione: " + shortUrl);
+    	    		
+        		} else {
+        			if (!bl.badWordsFinder(customText)) {
+        				shortUrl = customText;
+    	    			System.out.println("Custom URL inserito: " + shortUrl);
+        			} else {
+            			System.out.println("Custom text non accettato");
+            			response.status(401);
+            			return null;
+            		}	
+        		}
+        				
+        		if (!dao.checkUrl(shortUrl)) {
+        			dao.putUrl(shortUrl, url);
+        			
+        			//json con short url
+            		jsonObject.put("shortUrl", shortUrl);
+        		} else {
+        			System.out.println("ShortUrl già presente nel DB");
+        			response.status(401);
+        		}
+        		
+    		} else {  			
+    			System.out.println("Url maligno, non accettato");
     			response.status(401);
     		}
+    		
+    		
     			
     	    return jsonObject.toString();
     	});
