@@ -133,10 +133,10 @@ public class CassandraDAO implements DAO{
 
 	@Override
 	public Statistics getStatistics(String shortUrl) {
-		Map<String, Integer> mCountry = new HashMap<String, Integer>();
-		Map<Date, Integer> mDay = new HashMap<Date, Integer>();
-		Map<Date, Integer> mHour = new HashMap<Date, Integer>();
-		int unique = 0;
+		Map<String, Long> mCountry = new HashMap<String, Long>();
+		Map<Date, Long> mDay = new HashMap<Date, Long>();
+		Map<Date, Long> mHour = new HashMap<Date, Long>();
+		long unique = 0;
 		ResultSet rsCountry = session.execute("SELECT * FROM " 
 				+ CassandraSchema.COUNTRY_COUNTERS_TABLE 
 				+ " WHERE " + CassandraSchema.CC_SHORT_URL_COLUMN + " = "
@@ -156,21 +156,22 @@ public class CassandraDAO implements DAO{
 		
 		for (Row r : rsCountry) {
 			mCountry.put(r.getString(CassandraSchema.CC_COUNTRY_COLUMN), 
-					(int) r.getLong(CassandraSchema.CC_VALUE_COLUMN));
+					r.getLong(CassandraSchema.CC_VALUE_COLUMN));
 		}
 		for (Row r : rsDay) {
 			mDay.put(r.getDate(CassandraSchema.DC_DAY_COLUMN), 
-					(int) r.getLong(CassandraSchema.DC_VALUE_COLUMN));
+					r.getLong(CassandraSchema.DC_VALUE_COLUMN));
+			System.out.println(r.getDate(CassandraSchema.DC_DAY_COLUMN));
 		}
 		for (Row r : rsHour) {
 			mHour.put(r.getDate(CassandraSchema.HC_HOUR_COLUMN), 
-					(int) r.getLong(CassandraSchema.HC_VALUE_COLUMN));
+					r.getLong(CassandraSchema.HC_VALUE_COLUMN));
 		}
 		for (Row r : rsUnique) {
-			unique = (int) r.getLong(CassandraSchema.UC_VALUE_COLUMN);
+			unique = r.getLong(CassandraSchema.UC_VALUE_COLUMN);
 		}
 		
-		return new Statistics(mCountry, mDay, mHour, unique);
+		return new Statistics(shortUrl, mCountry, mDay, mHour, unique);
 	}
 
 	@Override

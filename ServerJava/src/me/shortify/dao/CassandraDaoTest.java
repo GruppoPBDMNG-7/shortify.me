@@ -2,6 +2,7 @@ package me.shortify.dao;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Map;
+import java.util.TimeZone;
 
 
 public class CassandraDaoTest {
@@ -25,6 +26,8 @@ public class CassandraDaoTest {
 			Date dd = (Date) cDay[i];
 			System.out.println(cValue[i]);
 		}
+		
+		System.out.println(s.toJson());
 		
 		d.close();
 	}
