@@ -1,6 +1,7 @@
 package me.shortify.utils.shortenerUrl;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Random;
 
 import org.apache.commons.codec.binary.Base64;
@@ -35,6 +36,4 @@ public class Algorithm {
 		return str.substring(0,HASHLENGTH);
 		
 	}
-	
-
 }
