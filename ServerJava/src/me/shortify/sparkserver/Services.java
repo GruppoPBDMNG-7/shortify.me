@@ -9,7 +9,8 @@ import static spark.SparkBase.externalStaticFileLocation;
 import java.util.Calendar;
 
 import me.shortify.dao.CassandraDAO;
-import me.shortify.utils.filter.Blacklist;
+import me.shortify.utils.filter.DomainChecker;
+import me.shortify.utils.filter.WordChecker;
 import me.shortify.utils.geoLocation.CountryIPInformation;
 import me.shortify.utils.shortenerUrl.Algorithm;
 
@@ -43,9 +44,10 @@ public class Services {
     		//si ottiene il long url dalla richiesta
     		String url = jsonObject.getString("longurl");
     		
-			Blacklist bl = new Blacklist();
+			DomainChecker dc = new DomainChecker();
+			WordChecker wc = new WordChecker();
 			
-    		if (!bl.badDomainFinder(url)) {
+    		if (!dc.isBadDomain(url)) {
     			String customText;
         		String shortUrl = "";
         		
@@ -73,7 +75,7 @@ public class Services {
     	    		System.out.println("Risultato conversione: " + shortUrl);
     	    		
         		} else {
-        			if (!bl.badWordsFinder(customText)) {
+        			if (!wc.isBadWord(customText)) {
         				shortUrl = customText;
     	    			System.out.println("Custom URL inserito: " + shortUrl);
         			} else {
