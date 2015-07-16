@@ -142,11 +142,11 @@ public class Services {
 			String jsonUrl = request.body();
 			JSONObject json = new JSONObject(jsonUrl);
 			
-			String shortUrl = json.getString("shorturl");	
+			String url = json.getString("shorturl");
+			String[] urlParts = url.split("/");
 			
-			//codice shorturl estratto dal link
-			shortUrl = shortUrl.substring(19);
-			
+			String shortUrl = urlParts[urlParts.length - 1];
+
 			DAO dao = new CassandraDAO();
 			json = dao.getStatistics(shortUrl).toJson();
 			
