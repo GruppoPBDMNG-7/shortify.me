@@ -25,20 +25,25 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
                 $http.post("http://localhost:4567/api/v1/stats", {shorturl: urlforstat})
                 .success(function(response) {
                     
+                    //Ottengo dati per statistiche dalla response
                     var hourCounters = response.hourCounters;
                     var uniqueCounter = response.uniqueCounter;
                     var countryCounters = response.countryCounters;
                     var dayCounters = response.dayCounters;
                     
+                    //Ottengo labels per asse x dell'istogramma
                     var labels = Object.keys(hourCounters).sort();
-                    var perHour = [];
-                    var total = [];
-                    var day = labels[0].split(" ")[0];
+                    var perHour = [];   //Visite per ora
+                    var total = [];     //Visite totali giornaliere
+                    var day = labels[0].split(" ")[0];  //Giorno considerato
+                    
+                    //Riepimento delle liste di valori per la rappresentazione grafica
                     for (var i = 0; i < labels.length; i++) {
                         perHour.push(hourCounters[labels[i]]);
-                        total.push(dayCounters[day]);
+                        total.push(dayCounters[day]);   //I valori saranno tutti uguali ai fini della rappresentazione
                     }
                     
+                    //Dati utili per il grafico canvas
                     $rootScope.labels = labels;
                     $rootScope.series = ['Hour', 'Total'];
                     $rootScope.data = [perHour, total];
