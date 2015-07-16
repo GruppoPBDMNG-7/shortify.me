@@ -24,24 +24,19 @@ La scelta di **cassandra** è una scelta solida grazie alla definizione **AP** d
 Nel nostro specifico caso questo garantisce al cliente un servizio sempre fruibile e con rapidità. Rispetto ad altri database NoSQL la **scalabilità** di cassandra è **ottima** al crescere dei nodi.
 
 <pre>
-Immagine:
-<a target="_blank" href="https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/images/scalabilit%C3%A0.png">Scalabilità</a>
+<img src="https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/images/scalabilit%C3%A0.png" alt="Scalabilità"/>
 </pre>
 Le nostre analisi statistiche possono essere fatte grazie all’uso dei contatori in cassandra che analizzeremo in dettaglio.
 
 ###Uso contatori
 Un difficoltà nell’uso dei contatori risiede nel sincronizzarli tra loro. Se arrivano due incrementi di un contatore c su due nodi, contemporaneamente, il vector clock non permette di decidere come agire. (c’è un errore nell’immagini l’incremento è per uno)
 <pre>
-Immagini:
-<a target="_blank" href="https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/images/count1.png">Contatori#1</a>
-<a target="_blank" href="https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/images/count2.png">Contatori#2</a>
+<img src="https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/images/count1.png" alt="Contatori#1"/><img src="https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/images/count2.png" alt="Contatori#2"/>
 </pre>
 Questa situazione spiacevole è risolta da Cassandra 2.0 partizionando il contatore c in più parti attribuibile ciascuna ad un nodo singolo.
 Quindi le varie parti vengono sincronizzate singolarmente, senza doverlo fare su tutte le parti del contatore contemporaneamente.
 <pre>
-Immagini:
-<a target="_blank" href="https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/images/count3.png">Contatori#3</a>
-<a target="_blank" href="https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/images/count4.png">Contatori#4</a>
+<img src="https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/images/count3.png" alt="Contatori#3"/><img src="https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/images/count4.png" alt="Contatori#4"/>
 </pre>
 Fonte: [Distributed Counters in Cassandra
 ](http://www.datastax.com/wp-content/uploads/2011/07/cassandra_sf_counters.pdf)
@@ -57,22 +52,19 @@ Sulla base delle operazioni che saranno realizzate dall’url shortener, si effe
 ####Condizione 1 - Scrittura dei dati
 Questo test mira a valutare le prestazioni nel caso di un carico composto da sole scritture. Può essere paragonato ad un carico di inserimenti di nuovi url.
 <pre>
-Immagine:
-<a target="_blank" href="https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/images/scrittura1.png">Scrittura</a>
+<img src="https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/images/scrittura1.png" alt="Scrittura#1"/>
 </pre>
 Si può osservare come in questo caso Cassandra sia la soluzione migliore, che permette inserimenti con un alto numero di operazioni al secondo, e soprattutto, una latenza molto bassa. HBase raggiunge dei risultati simili ma con una latenza costantemente maggiore, mentre MongoDB è quello che generalmente presenta le prestazioni meno elevate.
 
 ####Condizione 2 - Lettura e aggiornamento
 Questo test sottopone i tre database ad un carico composto per metà da operazioni di lettura semplice, e per l’altra metà da operazioni complesse di lettura e aggiornamento di valori. Di particolare interesse nel nostro caso è la seconda categoria di operazioni, che può approssimare il carico derivante dalla visita di uno short url (composta da una lettura del record, e l’aggiornamento dei vari contatori).
 <pre>
-Immagini:
-<a target="_blank" href="https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/images/scrittura2.png">Scrittura#2</a>
-<a target="_blank" href="https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/images/scrittura3.png">Scrittura#3</a>
+<img src="https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/images/scrittura2.png" alt="Scrittura#2"/><img src="https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/images/scrittura3.png" alt="Scrittura#3"/>
 </pre>
 Si riportano separatamente i risultati ottenuti per le operazioni di lettura e di aggiornamento. Si può osservare quindi come nel caso della lettura dei dati, sia Cassandra che HBase riportano risultati migliori sia per livello massimo di throughput, che per latenza, lasciando MongoDB all’ultimo posto. La situazione si ripete anche nel caso dell’aggiornamento, nel quale diventa ancora più marcata la differenza tra Cassandra/HBase e MongoDB, che rimane saldamente all’ultimo posto sia in termini di numero di operazioni al secondo massimo, che di latenza.
 <pre>
 Immagine:
-<a target="_blank" href="https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/images/scrittura4.png">Scrittura#4</a>
+<img src="https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/images/scrittura4.png" alt="Scrittura#4"/>
 </pre>
 Questo grafico mostra i risultati ottenuti all’esecuzione delle operazioni complesse di lettura e aggiornamento. La situazione è molto simile a quella che abbiamo osservato nei due casi precedenti.
 Possiamo concludere che per quanto riguarda operazioni di questo tipo HBase e Cassandra si rivelano quasi equivalenti, con Cassandra che offre solitamente una latenza leggermente minore, mentre HBase permette un throughput sensibilmente più alto. MongoDB offre invece le prestazioni peggiori, con livelli di latenza in alcuni casi inaccettabili.
@@ -80,9 +72,7 @@ Possiamo concludere che per quanto riguarda operazioni di questo tipo HBase e Ca
 ####Condizione 3 - Lettura
 Questo test sottopone i tre database ad un carico composto da sole letture. Può essere paragonato nel nostro caso ad una serie di operazioni di anteprima di uno short url, o per la lettura delle statistiche di un url.
 <pre>
-Immagine:
-<img src="https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/images/scrittura5.png" alt="Scrittura#5" />
-<a target="_blank" href="https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/images/scrittura5.png">Scrittura#5</a>
+<img src="https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/images/scrittura5.png" alt="Scrittura#5"/>
 </pre>
 In questo caso si rileva come la latenza aumenti all’aumentare del livello del throughput in tutti e tre i casi, e che i tre database non si discostano molto per quanto riguarda la latenza media. In questo caso MongoDB presenta un andamento più lineare (senza picchi), e permette anche di raggiungere il throughput più alto. HBase permette latenze leggermente inferiori. Cassandra invece è ultima in quanto a throughput massimo.
 
