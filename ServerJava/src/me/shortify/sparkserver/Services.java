@@ -139,7 +139,7 @@ public class Services {
 
 	private static void setIspezioneUrl() {
 		post(API_CONTEXT + API.STATS, (request, response) -> {
-			String jsonUrl = response.body();
+			String jsonUrl = request.body();
 			JSONObject json = new JSONObject(jsonUrl);
 			
 			String shortUrl = json.getString("shorturl");	
