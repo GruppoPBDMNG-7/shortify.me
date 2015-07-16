@@ -9,6 +9,7 @@ import static spark.SparkBase.externalStaticFileLocation;
 import java.util.Calendar;
 
 import me.shortify.dao.CassandraDAO;
+import me.shortify.dao.DAO;
 import me.shortify.utils.filter.DomainChecker;
 import me.shortify.utils.filter.WordChecker;
 import me.shortify.utils.geoLocation.CountryIPInformation;
@@ -23,20 +24,16 @@ public class Services {
 	private static final String API_CONTEXT = "/api/v1";
 	private static final int MAX_COUNT = 9;
 	
-	public static void setupEndpoints() {	
-		
-		//folder del client web
-		externalStaticFileLocation("/ClientAngular");
-		
+	public static void setupEndpoints() {		
 		setConversione();
-    	setVisitaShortUrl();    
+    	setVisitaShortUrl(); 
+    	setIspezioneUrl();
     	setOpzioni();
     }
 	
 	
 	private static void setConversione() {
-		post(API_CONTEXT + API.CONVERT, (request, response) -> {
-    		
+		post(API_CONTEXT + API.CONVERT, (request, response) -> {		
     		String json = request.body();
     		System.out.println("Parametro passato: " + json) ;
     		JSONObject jsonObject = new JSONObject(json);
@@ -59,7 +56,7 @@ public class Services {
         			customText = "";
         		}
         		
-        		CassandraDAO dao = new CassandraDAO();
+        		DAO dao = new CassandraDAO();
         		
         		if(customText.equals("")) {  			
         			int numTentativi = 0;
@@ -140,6 +137,23 @@ public class Services {
     	});
 	}
 
+	private static void setIspezioneUrl() {
+		post(API_CONTEXT + API.STATS, (request, response) -> {
+			String jsonUrl = response.body();
+			JSONObject json = new JSONObject(jsonUrl);
+			
+			String shortUrl = json.getString("shorturl");	
+			
+			//codice shorturl estratto dal link
+			shortUrl = shortUrl.substring(19);
+			
+			DAO dao = new CassandraDAO();
+			json = dao.getStatistics(shortUrl).toJson();
+			
+			return json.toString();
+		});
+	}
+	
 	private static void setOpzioni() {
     	options("/*", (request,response)->{
 
