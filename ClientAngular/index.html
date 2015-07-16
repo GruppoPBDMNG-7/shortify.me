@@ -6,7 +6,11 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script>
 	<script src="js/app.js"></script>
 	<script src="js/controllers/shortingCtrl.js"></script>
-    <link rel="stylesheet" href="css/style.css" />    
+    <script src="js/controllers/urlStatistics.js"></script>
+    <script src="js/angular-chart/Chart.js"></script>
+    <script src="js/angular-chart/angular-chart.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/angular-chart.css">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
 </head>
@@ -22,12 +26,12 @@
         </ul>
 
         <form class="navbar-form navbar-right ">         
-            <div class="form-group">
-              <input type="text" size="30" class="form-control" placeholder="Inspect a Shortify URL...">
+            <div class="form-group" ng-controller="urlStatistics">
+                <input name="linkToExpect" ng-model="urlforstat" type="url" size="30" class="form-control" placeholder="Inspect a Shortify URL...">
+                <button type="submit" class="btn btn-primary" ng-click="showStatistics(urlforstat)">
+                    <span class="glyphicon glyphicon-eye-open"></span>
+                </button>
             </div>
-            <button type="submit" class="btn btn-primary">
-                <span class="glyphicon glyphicon-eye-open"></span>
-            </button>
         </form>
         </div>
         </div>
@@ -40,40 +44,45 @@
             <img  alt="Shortify.me" src="images/shortify_logo.png" />
         </div>
         
-        <div id="longURLDiv" ng-show="!customURLView">
-        <form name="urlInputForm" class="form-inline centeredText">     
-            <div class="form-group">
-                <input class="form-control" tabindex="1" name="linkInput" type="text" size="50" 
-                       ng-model="url" placeholder="Insert here your long URL: http://"></input>
-                <input class="btn btn-success" tabindex="2" id="shortifyButton" type="submit" 
-                       value="Shortify!" ng-click="convert(url);"></input>    
+        <div id="shortify" ng-hide="!notStatisticsView" ng-controller="urlStatistics">
+            <div id="longURLDiv" ng-show="!customURLView">
+                <form name="urlInputForm" class="form-inline centeredText">
+                    <div class="form-group">
+                        <input class="form-control" tabindex="1" name="linkInput" type="text" size="50"
+                               ng-model="url" placeholder="Insert here your long URL: http://"></input>
+                        <input class="btn btn-success" tabindex="2" id="shortifyButton" type="submit" 
+                               value="Shortify!" ng-click="convert(url);"></input>
+                    </div>
+                </form>
             </div>
-        </form>
-        </div>
         
-        <div id="customURLDiv" ng-show="customURLView">
-            <form name="urlInputForm" class="centeredText" >     
-                <div class="form-group">
-                    <input class="form-control" tabindex="1" name="linkInput" type="text" size="50" 
-                           ng-model="url" placeholder="Insert here your long URL: http://"></input>
-                </div>
+            <div id="customURLDiv" ng-show="customURLView">
+                <form name="urlInputForm" class="centeredText" >
+                    <div class="form-group">
+                        <input class="form-control" tabindex="1" name="linkInput" type="text" size="50" 
+                               ng-model="url" placeholder="Insert here your long URL: http://"></input>
+                    </div>
 
-                <div class="input-group" >
-                    <span class="input-group-addon" id="basic-addon1">shortify.me/</span>
-                    <input type="text" ng-model="customText" class="form-control" 
-                           placeholder="Your-custom-text" aria-describedby="basic-addon1"> 
+                    <div class="input-group" >
+                        <span class="input-group-addon" id="basic-addon1">shortify.me/</span>
+                        <input type="text" ng-model="customText" class="form-control"
+                               placeholder="Your-custom-text" aria-describedby="basic-addon1">
 
-                </div>
-                <br/>
-                <div class="form-group">
-                    <input class="btn btn-success" tabindex="2" id="shortifyButton" type="submit" 
-                        value="Make your custom URL!" ng-click="convert(url, customText);"></input>  
-                </div>
- 
-            </form>
+                    </div>
+                    <br/>
+                    <div class="form-group">
+                        <input class="btn btn-success" tabindex="2" id="shortifyButton" type="submit"
+                            value="Make your custom URL!" ng-click="convert(url, customText);"></input>
+                    </div>
+                </form>
+            </div>
         </div>
 
-    
+        <div id="statisticsDiv" class="chart-container" ng-controller="urlStatistics" ng-hide="notStatisticsView">
+            <canvas id="bar" class="chart chart-bar centeredText" data="data" labels="labels" width="700" height="350"></canvas>
+        </div>
+
+
         <div id="resultDiv" ng-show="done">           
             <p>Your SHORTIFY URL</p>
             <p class="resultLink"><strong>{{"localhost:4567/"+shorturl}}</strong></p>      

@@ -87,3 +87,15 @@ body{
     -webkit-animation-name: fadeOutUpBig; 
     animation-name: fadeOutUpBig; 
 }
+
+.chart-container {
+    position: absolute;
+    right: 5%;
+    left: 5%;
+}
+
+.chart-container {
+    position: absolute;
+    right: 5%;
+    left: 5%;
+}
