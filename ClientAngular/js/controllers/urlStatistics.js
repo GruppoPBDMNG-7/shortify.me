@@ -25,11 +25,10 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
                 $http.post("http://localhost:4567/api/v1/stats", {shorturl: urlforstat})
                 .success(function(response) {
                     
-                    var hourCounters = response.data.hourCounters;
-                    var uniqueCounter = response.data.uniqueCounter;
-                    var countryCounters = response.data.countryCounters;
-                    var dayCounters = response.data.dayCounters;
-                    
+                    var hourCounters = response.hourCounters;
+                    var uniqueCounter = response.uniqueCounter;
+                    var countryCounters = response.countryCounters;
+                    var dayCounters = response.dayCounters;
                     
                     var labels = Object.keys(hourCounters).sort();
                     var perHour = [];
