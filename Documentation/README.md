@@ -4,7 +4,7 @@ Un URL Shortener è un servizio web il cui scopo è ridurre l’indirizzo di una
 
 ##Indice
 
-- Storia e motivazioni del contesto
+- [Storia e motivazioni del contesto](https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/Storia%20e%20motivazioni%20del%20contesto.md)
 - Analisi delle funzionalità
 - Analisi dei costi delle operazioni
 - Modello dei dati
