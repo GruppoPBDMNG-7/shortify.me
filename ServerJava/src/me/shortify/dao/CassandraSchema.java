@@ -45,21 +45,26 @@ public class CassandraSchema {
 			+ "(" + CC_SHORT_URL_COLUMN +" text,"
 			+ CC_COUNTRY_COLUMN + " text,"
 			+ CC_VALUE_COLUMN +" counter,"
-			+ "PRIMARY KEY (("+ CC_SHORT_URL_COLUMN +"), " + CC_COUNTRY_COLUMN + "));";
+			+ "PRIMARY KEY (("+ CC_SHORT_URL_COLUMN +"), " + CC_COUNTRY_COLUMN + ")) "
+			+ "WITH caching = '{\"keys\":\"ALL\", \"rows_per_partition\":\"10\"}';";
 	
 	public static final String CREATE_DAY_COUNTERS =
 			"CREATE TABLE IF NOT EXISTS " + DAY_COUNTERS_TABLE + " "
 					+ "(" + DC_SHORT_URL_COLUMN + " text,"
 					+ DC_DAY_COLUMN +" timestamp,"
 					+ DC_VALUE_COLUMN + " counter,"
-					+ "PRIMARY KEY ((" + DC_SHORT_URL_COLUMN + "), " + DC_DAY_COLUMN + "));";
+					+ "PRIMARY KEY ((" + DC_SHORT_URL_COLUMN + "), " + DC_DAY_COLUMN + ")) "
+					+ "WITH CLUSTERING ORDER BY (" + DC_DAY_COLUMN + " DESC) "
+					+ "AND caching = '{\"keys\":\"ALL\", \"rows_per_partition\":\"10\"}';";;
 	
 	public static final String CREATE_HOUR_COUNTERS = 
 			"CREATE TABLE IF NOT EXISTS " + HOUR_COUNTERS_TABLE + " "
 					+ "(" + HC_SHORT_URL_COLUMN + " text,"
 					+ HC_HOUR_COLUMN + " timestamp,"
 					+ HC_VALUE_COLUMN + " counter,"
-					+ "PRIMARY KEY ((" + HC_SHORT_URL_COLUMN + "), " + HC_HOUR_COLUMN + "));";
+					+ "PRIMARY KEY ((" + HC_SHORT_URL_COLUMN + "), " + HC_HOUR_COLUMN + ")) "
+					+ "WITH CLUSTERING ORDER BY (" + HC_HOUR_COLUMN + " DESC) "
+					+ "AND caching = '{\"keys\":\"ALL\", \"rows_per_partition\":\"10\"}';";
 	
 	public static final String CREATE_UNIQUE_COUNTER = 
 			"CREATE TABLE IF NOT EXISTS " + UNIQUE_COUNTER_TABLE + " "
