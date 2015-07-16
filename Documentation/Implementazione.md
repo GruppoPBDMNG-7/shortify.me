@@ -14,21 +14,24 @@ CREATE TABLE urlshortener.countrycounters (
     country text,
     value counter,
     PRIMARY KEY (short_url, country)
-)
+) WITH caching = '{"keys":"ALL", "rows_per_partition":"10"}';
 
 CREATE TABLE urlshortener.hourcounters (
     short_url text,
     hour timestamp,
     value counter,
     PRIMARY KEY (short_url, hour)
-)
+) WITH CLUSTERING ORDER BY (hour DESC) 
+  AND caching = '{"keys":"ALL", "rows_per_partition":"10"}';
 
 CREATE TABLE urlshortener.daycounters
     short_url text,
     day timestamp,
     value counter,
     PRIMARY KEY (short_url, day)
-)
+) WITH CLUSTERING ORDER BY (day DESC) 
+  AND caching = '{"keys":"ALL", "rows_per_partition":"10"}';
+   
 CREATE TABLE urlshortener.uniquecounter (
     short_url text PRIMARY KEY,
     value counter
