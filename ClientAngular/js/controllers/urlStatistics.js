@@ -25,12 +25,60 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
             if($rootScope.notStatisticsView) {
                 
                 //Richiesta delle informazioni associate ad uno specifico shorturl
-                /**$http.post("http://localhost:4567/inspect", {shorturl: urlforstat})
+                $http.post("http://localhost:4567/api/v1/stats", {shorturl: urlforstat})
                 .success(function(response) {
-                    $rootScope.data = response.data;
-                })
+                    
+                    var hourCounters = response.data.hourCounters;
+                    var uniqueCounter = response.data.uniqueCounter;
+                    var countryCounters = response.data.countryCounters;
+                    var dayCounters = response.data.dayCounters;
+                    
+                    
+                    var labels = Object.keys(hourCounters).sort();
+                    var perHour = [];
+                    var total = [];
+                    var day = labels[0].split(" ")[0];
+                    for (var i = 0; i < labels.length; i++) {
+                        perHour.push(hourCounters[labels[i]]);
+                        total.push(dayCounters[day]);
+                    }
+                    
+                    $rootScope.labels = labels;
+                    $rootScope.series = ['Hour', 'Total'];
+                    $rootScope.data = [perHour, total];
+                    
+                })    
                 .error(function(response) {
+                    console.log("Error");
+                    
+                });
+                
+                
+                /*TEST WITH LOCAL JSON
+                $http.get("js/controllers/response.json")
+                .then(function(response){
+                    var hourCounters = response.data.hourCounters;
+                    var uniqueCounter = response.data.uniqueCounter;
+                    var countryCounters = response.data.countryCounters;
+                    var dayCounters = response.data.dayCounters;
+                    
+                    
+                    var labels = Object.keys(hourCounters).sort();
+                    var perHour = [];
+                    var total = [];
+                    
+                    var day = labels[0].split(" ")[0];
+                    for (var i = 0; i < labels.length; i++) {
+                        perHour.push(hourCounters[labels[i]]);
+                        total.push(dayCounters[day]);
+                    }
+                    
+                    $rootScope.labels = labels;
+                    $rootScope.series = ['Hour', 'Total'];
+                    $rootScope.data = [perHour, total];
+                    
                 });*/
+                
                 
                 $rootScope.notStatisticsView = false;
                 document.getElementById("statisticsDiv").setAttribute("class", "centeredText animated fadeIn");
