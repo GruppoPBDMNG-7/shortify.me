@@ -5,14 +5,11 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
     
     //Dati di esempio utilizzati per la costruzione del grafico
     //x
-    $rootScope.labels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+    $rootScope.labels = [];
     //Casistiche
-    $rootScope.series = ['Series A', 'Series B'];
+    $rootScope.series = [];
     //y
-    $rootScope.data = [
-        [65, 59, 80, 81, 56, 55, 40],
-        [28, 48, 40, 19, 86, 27, 90]
-    ];
+    $rootScope.data = [];
     //Opzioni eventuali del grafico da specificare
     $rootScope.options = {};
     
