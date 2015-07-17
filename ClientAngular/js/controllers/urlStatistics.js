@@ -38,19 +38,16 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
                     //BAR CHART statistiche intervalli orari
                     var labels = Object.keys(hourCounters).sort();
                     var perHour = [];   //Visite per ora
-                    var total = [];     //Visite totali giornaliere
-                    var day = labels[0].split(" ")[0];  //Giorno considerato
                     
                     //Riepimento delle liste di valori per la rappresentazione grafica
                     for (var i = 0; i < labels.length; i++) {
                         perHour.push(hourCounters[labels[i]]);
-                        total.push(dayCounters[day]);   //I valori saranno tutti uguali ai fini della rappresentazione
                     }
                     
                     //Dati utili per il grafico canvas
                     $rootScope.labels = labels;
-                    $rootScope.series = ['Hour', 'Total'];
-                    $rootScope.data = [perHour, total];
+                    $rootScope.series = ['Hour'];
+                    $rootScope.data = [perHour];
                     
                    
                     //TABELLA VISITE GIORNALIERE
