@@ -15,7 +15,7 @@ e delle letture che sono:
 
 Il caso della Creazione del nuovo short url richiede sia una lettura che una scrittura perchè bisogna verificare prima se esiste già e poi scriverlo.
 
-Per il caso di studio sarà necessario avere **un** **servizio** **sempre** **fruibile** da parte dell’utente e che permetta di accedere sempre ai dati. In oltre deve essere in grado di **gestire** adeguatamente **l’**overload**** del sistema o essere adeguato a un grande flusso di dati già nativamente.
+Per il caso di studio sarà necessario avere **un** **servizio** **sempre** **fruibile** da parte dell’utente e che permetta di accedere sempre ai dati. In oltre deve essere in grado di **gestire** adeguatamente **l’overload** del sistema o essere adeguato a un grande flusso di dati già nativamente.
 
 Le considerazioni verranno fatte sul **CAP THEOREM** che prevede una classificazione rispetto alle 3 importanti **caratteristiche** di un database nosql : **consistenza**, **disponibilità** e **tolleranza** **per la partizione**. <br>Per definizione non è possibile avere un database che abbia tutte e 3 le caratteristiche ma al più 2. Per le considerazioni fatte in precedenza **le** **caratteristiche** **scelte** **sono** la **disponibilità** che garantisce un servizio sempre utilizzabile **e** la **tolleranza** **della partizione** che permette di utilizzare sempre il servizio anche se la partizione non comunica con le altre.
 
