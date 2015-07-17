@@ -11,6 +11,7 @@
     <script src="js/angular-chart/angular-chart.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/angular-chart.css">
+    <link rel="stylesheet" href="css/flag-icon.css">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
 </head>
@@ -78,9 +79,7 @@
             </div>
         </div>
 
-        <div id="statisticsDiv" class="chart-container" ng-controller="urlStatistics" ng-hide="notStatisticsView">
-            <canvas id="bar" class="chart chart-bar centeredText" data="data" labels="labels" width="700" height="350" series="series"></canvas>
-        </div>
+        
 
 
         <div id="resultDiv" ng-show="done">           
