@@ -7,4 +7,6 @@ Il servizio realizzato permette di:
 - creare short URL personalizzati (con controlli sulle parole non ammesse);
 - visualizzare statistiche riguardanti uno short URL.
 
+![funzionalità](https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/images/funziolalit%C3%A0.png)
+
 La funzionalità di ispezione di uno short URL comprende sia la visualizzazione delle statistiche, sia la visualizzazione del long URL. Queste informazioni verranno richieste tutte una sola volta quando l'utente decide di ispezionare un'URL.
