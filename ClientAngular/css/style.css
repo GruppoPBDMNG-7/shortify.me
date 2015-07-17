@@ -27,8 +27,39 @@ body{
     color:darkgreen;
 }
 
+.tables-container {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+}
+
+.country-counter {
+    -webkit-flex: 1;
+    flex: 1;
+    margin: 5px;
+}
+
+.days-counter {
+    -webkit-flex: 1;
+    flex: 1;
+    margin: 5px;
+}
+
+
 #customURLDiv {
     width: 500px;
+}
+
+#statisticsDiv {
+    position: absolute;
+    left: 50%;
+    width: 800px;
+    margin-left: -400px;
 }
 
 #resultDiv, #errorDiv {
@@ -94,38 +125,4 @@ body{
 .fadeOutUpBig { 
     -webkit-animation-name: fadeOutUpBig; 
     animation-name: fadeOutUpBig; 
-}
-
-.statistics-container {
-    margin-top: 170px;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: row;
-    flex-direction: row;
-    -webkit-align-items: center;
-    align-items: center;
-    -webkit-justify-content: center;
-    justify-content: center;
-}
-
-.hours-bar-container {
-    -webkit-flex: 2;
-    flex: 2;
-    margin: 5px;
-}
-
-.unique-counter {
-    text-align: center;
-}
-
-.country-counter {
-    -webkit-flex: 1;
-    flex: 1;
-    margin: 5px;
-}
-
-.days-counter {
-    -webkit-flex: 1;
-    flex: 1;
-    margin: 5px;
 }
