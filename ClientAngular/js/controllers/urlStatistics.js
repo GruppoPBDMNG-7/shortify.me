@@ -3,15 +3,12 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
     $rootScope.notStatisticsView = true;
     $rootScope.textUrlStatistics = "Inspect a Shortify URL";
     
-    //Dati di esempio utilizzati per la costruzione del grafico
     //x
     $rootScope.labels = [];
     //Casistiche
     $rootScope.series = [];
     //y
     $rootScope.data = [];
-    //Opzioni eventuali del grafico da specificare
-    $rootScope.options = {};
     
     /**Funzione per la richiesta delle informazioni riguardanti uno
     specifico shorturl e la visualizzazione del grafuico associato*/
