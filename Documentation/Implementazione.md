@@ -50,4 +50,7 @@ Si può notare inoltre come i contatori siano aggiornati alla visita della pagin
 - La possibilità, offerta da Cassandra, e descritta nei paragrafi precedenti, di usare delle colonne counter che permettono un’aggiornamento consistente e con buone prestazioni anche nel caso di dati distribuiti
 - La necessità di ridurre il quantitativo di righe che è necessario leggere, viste le prestazioni non eccellenti in lettura di Cassandra. La situazione è ancora più gravosa se consideriamo il numero di visite che potrebbero essere effettuate (che può arrivare nell’ordine di milioni).
 
-Tutte le tabelle condividono lo stesso “partitioning key”, ovvero short_url. Questa chiave permette di memorizzare nello stesso nodo tutte le righe che hanno la stessa partition key, trattandole effettivamente come se fossero una singola riga, dotata di più colonne. Questo vuol dire quindi che tutti i dati relativi ad uno short url sono memorizzati sullo stesso nodo, rendendone quindi più efficiente l’estrazione. (fonte: http://intellidzine.blogspot.it/2014/01/cassandra-data-modelling-primary-keys.html)
+Ogni tabella è dotata di una propria chiave primaria: nel caso di countrycounters, hourcounters, daycounters e uniquecountersip, la chiave è divisa in due parti:
+ - Una partition key (ovvero short_url)
+ - Una clustering key
+Per ciascuna column family, tutte le righe che hanno la stessa partition key sono memorizzate nello stesso nodo (partizione), trattandole effettivamente come se fossero una singola riga, dotata di più colonne. (fonte: http://intellidzine.blogspot.it/2014/01/cassandra-data-modelling-primary-keys.html)
