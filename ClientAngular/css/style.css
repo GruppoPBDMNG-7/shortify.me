@@ -88,14 +88,36 @@ body{
     animation-name: fadeOutUpBig; 
 }
 
-.chart-container {
-    position: absolute;
-    right: 5%;
-    left: 5%;
+.statistics-container {
+    margin-top: 170px;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
 }
 
-.chart-container {
-    position: absolute;
-    right: 5%;
-    left: 5%;
+.hours-bar-container {
+    -webkit-flex: 2;
+    flex: 2;
+    margin: 5px;
+}
+
+.unique-counter {
+    text-align: center;
+}
+
+.country-counter {
+    -webkit-flex: 1;
+    flex: 1;
+    margin: 5px;
+}
+
+.days-counter {
+    -webkit-flex: 1;
+    flex: 1;
+    margin: 5px;
 }
