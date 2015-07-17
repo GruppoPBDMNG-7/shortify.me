@@ -22,13 +22,20 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
                 $http.post("http://localhost:4567/api/v1/stats", {shorturl: urlforstat})
                 .success(function(response) {
                     
+                    
                     //Ottengo dati per statistiche dalla response
                     var hourCounters = response.hourCounters;
-                    var uniqueCounter = response.uniqueCounter;
+                    $scope.uniqueCounter = response.uniqueCounter;
                     var countryCounters = response.countryCounters;
-                    var dayCounters = response.dayCounters;
+                    dayCounters = response.dayCounters;
                     
-                    //Ottengo labels per asse x dell'istogramma
+                    /*console.log(hourCounters);
+                    console.log(uniqueCounter);
+                    console.log(countryCounters);
+                    console.log(dayCounters);*/
+                    
+                    
+                    //BAR CHART statistiche intervalli orari
                     var labels = Object.keys(hourCounters).sort();
                     var perHour = [];   //Visite per ora
                     var total = [];     //Visite totali giornaliere
@@ -45,6 +52,45 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
                     $rootScope.series = ['Hour', 'Total'];
                     $rootScope.data = [perHour, total];
                     
+                   
+                    //TABELLA VISITE GIORNALIERE
+                    var days = Object.keys(dayCounters).reverse();
+                    for (var i = 0; i < days.length; i++) {
+                        var count = dayCounters[days[i]];
+                        var table = document.getElementById("days-table-rows");
+                        var row = table.insertRow(i);
+                        row.setAttribute("class", "success");
+                        var d = row.insertCell(0);
+                        var v = row.insertCell(1);
+
+                        d.innerHTML = days[i];
+                        v.innerHTML = count;
+                    }
+                    
+                    //TABELLA VISITE PER NAZIONE
+                    var countries = Object.keys(countryCounters);
+                    for (var i = 0; i < countries.length; i++) {
+                        var count = countryCounters[countries[i]];
+                        var table = document.getElementById("country-table-rows");
+                        var row = table.insertRow(i);
+                        row.setAttribute("class", "success");
+                        var c = row.insertCell(0);
+                        var v = row.insertCell(1);
+                        
+                        if (countries[i] != "NULL") {
+                            c.innerHTML = '<span class="flag-icon flag-icon-' + 
+                                countries[i].toLowerCase() + '"></span>';
+                            v.innerHTML = count;
+                            
+                        } else {
+                            c.innerHTML = "UNDEFINED";
+                            v.innerHTML = count;
+                            
+                        }
+                    }
+                    
+                    
+                    
                 })    
                 .error(function(response) {
                     console.log("Error");
@@ -52,36 +98,27 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
                 });
                 
                 
-                /*TEST WITH LOCAL JSON
-                $http.get("js/controllers/response.json")
-                .then(function(response){
-                    var hourCounters = response.data.hourCounters;
-                    var uniqueCounter = response.data.uniqueCounter;
-                    var countryCounters = response.data.countryCounters;
-                    var dayCounters = response.data.dayCounters;
-                    
-                    
-                    var labels = Object.keys(hourCounters).sort();
-                    var perHour = [];
-                    var total = [];
-                    
-                    var day = labels[0].split(" ")[0];
-                    for (var i = 0; i < labels.length; i++) {
-                        perHour.push(hourCounters[labels[i]]);
-                        total.push(dayCounters[day]);
-                    }
-                    
-                    $rootScope.labels = labels;
-                    $rootScope.series = ['Hour', 'Total'];
-                    $rootScope.data = [perHour, total];
-                    
-                });*/
-                
-                
                 $rootScope.notStatisticsView = false;
-                document.getElementById("statisticsDiv").setAttribute("class", "centeredText animated fadeIn");
+                document
+                    .getElementById("container")
+                    .setAttribute("class", "centered-statistics-view animated fadeIn");
+                
             } else {
+                //PULIZIA ELIMINANDO RIGHE AGGIUNTE ALLE TABELLE
+                var countryTableRows = document.getElementById("country-table-rows");
+                while (countryTableRows.firstChild) {
+                    countryTableRows.removeChild(countryTableRows.firstChild);
+                }
+                
+                var daysTableRows = document.getElementById("days-table-rows");
+                while (daysTableRows.firstChild) {
+                    daysTableRows.removeChild(daysTableRows.firstChild);
+                }
+                
                 $rootScope.notStatisticsView = true;
+                document
+                    .getElementById("container")
+                    .setAttribute("class", "centered animated fadeIn");
             
             }
             
