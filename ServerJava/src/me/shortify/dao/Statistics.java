@@ -75,9 +75,9 @@ public class Statistics {
 		for (Map.Entry<Date, Long> e : dayCounters.entrySet()) {
 			Calendar c = new GregorianCalendar();
 			c.setTime(e.getKey());
-			c.setTimeZone(TimeZone.getTimeZone("UTC"));
+			sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 			sdf.setCalendar(c);
-			String date = sdf.format(c.getTime());		
+			String date = sdf.format(c.getTime());
 			dayJS.put(date, e.getValue());
 		}
 		json.put(DAY_COUNTERS_FIELD, dayJS);
@@ -87,7 +87,7 @@ public class Statistics {
 		for (Map.Entry<Date, Long> e : hourCounters.entrySet()) {
 			Calendar c = new GregorianCalendar();
 			c.setTime(e.getKey());
-			c.setTimeZone(TimeZone.getTimeZone("UTC"));
+			sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 			sdf.setCalendar(c);
 			String date = sdf.format(c.getTime());			
 			hourJS.put(date, e.getValue());
