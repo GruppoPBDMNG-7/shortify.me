@@ -133,6 +133,7 @@ public class CassandraDAO implements DAO{
 
 	@Override
 	public Statistics getStatistics(String shortUrl) {
+		String longUrl = getUrl(shortUrl);
 		Map<String, Long> mCountry = new HashMap<String, Long>();
 		Map<Date, Long> mDay = new HashMap<Date, Long>();
 		Map<Date, Long> mHour = new HashMap<Date, Long>();
@@ -171,7 +172,7 @@ public class CassandraDAO implements DAO{
 			unique = r.getLong(CassandraSchema.UC_VALUE_COLUMN);
 		}
 		
-		return new Statistics(shortUrl, mCountry, mDay, mHour, unique);
+		return new Statistics(shortUrl, longUrl, mCountry, mDay, mHour, unique);
 	}
 
 	@Override
