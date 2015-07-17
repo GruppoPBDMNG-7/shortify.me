@@ -9,6 +9,7 @@ import java.util.TimeZone;
 import org.json.JSONObject;
 
 public class Statistics {
+	private String longUrl;
 	private String shortUrl;
 	private Map<String, Long> countryCounters;
 	private Map<Date, Long> dayCounters;
@@ -16,14 +17,19 @@ public class Statistics {
 	private long uniqueCounter;
 	
 	
-	public Statistics(String shortUrl, Map<String, Long> countryCounters,
+	public Statistics(String longUrl, String shortUrl, Map<String, Long> countryCounters,
 			Map<Date, Long> dayCounters,
 			Map<Date, Long> hourCounters, long uniqueCounter) {
+		this.longUrl = longUrl;
 		this.shortUrl = shortUrl;
 		this.countryCounters = countryCounters;
 		this.hourCounters = hourCounters;
 		this.dayCounters = dayCounters;
 		this.uniqueCounter = uniqueCounter;
+	}
+	
+	public String getLongUrl() {
+		return this.longUrl;
 	}
 	
 	public Map<String, Long> getCountryCounters() {
