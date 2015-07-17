@@ -53,4 +53,5 @@ Si può notare inoltre come i contatori siano aggiornati alla visita della pagin
 Ogni tabella è dotata di una propria chiave primaria: nel caso di countrycounters, hourcounters, daycounters e uniquecountersip, la chiave è divisa in due parti:
  - Una partition key (ovvero short_url)
  - Una clustering key
+
 Per ciascuna column family, tutte le righe che hanno la stessa partition key sono memorizzate nello stesso nodo (partizione), trattandole effettivamente come se fossero una singola riga, dotata di più colonne. (fonte: http://intellidzine.blogspot.it/2014/01/cassandra-data-modelling-primary-keys.html)
