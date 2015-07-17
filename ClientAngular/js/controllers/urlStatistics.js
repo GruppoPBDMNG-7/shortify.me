@@ -96,9 +96,6 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
                 
                 
                 $rootScope.notStatisticsView = false;
-                document
-                    .getElementById("container")
-                    .setAttribute("class", "centered-statistics-view animated fadeIn");
                 
             } else {
                 //PULIZIA ELIMINANDO RIGHE AGGIUNTE ALLE TABELLE
@@ -113,9 +110,6 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
                 }
                 
                 $rootScope.notStatisticsView = true;
-                document
-                    .getElementById("container")
-                    .setAttribute("class", "centered animated fadeIn");
             
             }
             
