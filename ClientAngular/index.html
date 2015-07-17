@@ -28,7 +28,7 @@
 
         <form class="navbar-form navbar-right ">         
             <div class="form-group" ng-controller="urlStatistics">
-                <input name="linkToExpect" ng-model="urlforstat" type="url" size="30" class="form-control" placeholder="Inspect a Shortify URL...">
+                <input name="linkToExpect" ng-model="urlforstat" type="text" size="30" class="form-control" placeholder="Inspect a Shortify URL...">
                 <button type="submit" class="btn btn-primary" ng-click="showStatistics(urlforstat)">
                     <span class="glyphicon glyphicon-eye-open"></span>
                 </button>
@@ -90,38 +90,47 @@
         <div id="errorDiv" ng-show="error">           
             <p>An error occurred. Please try again later.</p>     
         </div>
-    </div>
 
-    <div id="statisticsDiv" class="statistics-container" ng-controller="urlStatistics" ng-hide="notStatisticsView">
-        <div class="hours-bar-container">
-            <canvas id="bar" class="chart chart-bar" data="data" labels="labels" width="400" height="250" series="series"></canvas>
-            <div class="unique-counter">
-                <h4 class="resultLink">Visite uniche: {{uniqueCounter}}</h4>
+        <div id="statisticsDiv" class="well" ng-controller="urlStatistics" ng-hide="notStatisticsView">
+        
+        <!-- HEADER -->
+        
+        <div>
+            <canvas id="line" class="chart chart-line" data="data" labels="labels" series="series" legend="true"></canvas>
+            <div class="centeredText alert alert-success">
+                <h4>Unique visits: {{uniqueCounter}}</h4>
             </div>
         </div>
-        <div class="country-counter">
-            <table id="country-table" class="table">
-                <thead>
-                  <tr>
-                    <th>Nazione</th>
-                    <th>Visite</th>
-                  </tr>
-                </thead>
-                <tbody id="country-table-rows"></tbody>
-            </table>
-        </div>
-        <div class="days-counter">
-            <table id="days-table" class="table">
-                <thead>
-                    <tr>
-                        <th>Giorno</th>
+        
+        <div class="tables-container">
+            <div class="country-counter">
+                <table id="country-table" class="table">
+                    <thead>
+                      <tr>
+                        <th>Nazione</th>
                         <th>Visite</th>
-                    </tr>
-                </thead>
-                <tbody id="days-table-rows"></tbody>
-            </table>
+                      </tr>
+                    </thead>
+                    <tbody id="country-table-rows"></tbody>
+                </table>
+            </div>
+            <div class="days-counter">
+                <table id="days-table" class="table">
+                    <thead>
+                        <tr>
+                            <th>Giorno</th>
+                            <th>Visite</th>
+                        </tr>
+                    </thead>
+                    <tbody id="days-table-rows"></tbody>
+                </table>
+            </div>
         </div>
     </div>
+
+    </div>
+
+    
 
 
 </body>
