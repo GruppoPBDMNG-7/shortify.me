@@ -188,4 +188,9 @@ public class CassandraDAO implements DAO{
 		
 		return longUrl;
 	}
+	
+	//THIS IS A TEST-ONLY METHOD! NEVER USE IT!
+	public void resetDB(){
+		session.execute("DROP KEYSPACE "+ CassandraSchema.KEYSPACE_NAME+" ;");
+	}
 }
