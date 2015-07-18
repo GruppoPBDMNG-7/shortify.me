@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
@@ -37,6 +39,11 @@ public class CassandraDAO implements DAO{
 	@Override
 	public boolean checkUrl(String shortUrl) {
 		boolean exists = false;
+		
+		PreparedStatement ps = session.prepare("SELECT " + CassandraSchema.URLS_SHORT_URL_COLUMN + " FROM " 
+				+ CassandraSchema.URLS_TABLE + " WHERE " 
+				+ CassandraSchema.URLS_SHORT_URL_COLUMN + " = ?;");
+		BoundStatement bs = ps.bind(shortUrl);
 		
 		ResultSet rs = session.execute("SELECT " + CassandraSchema.URLS_SHORT_URL_COLUMN + " FROM " 
 				+ CassandraSchema.URLS_TABLE + " WHERE " 
@@ -172,7 +179,7 @@ public class CassandraDAO implements DAO{
 			unique = r.getLong(CassandraSchema.UC_VALUE_COLUMN);
 		}
 		
-		return new Statistics(shortUrl, longUrl, mCountry, mDay, mHour, unique);
+		return new Statistics(longUrl, shortUrl, mCountry, mDay, mHour, unique);
 	}
 
 	@Override
