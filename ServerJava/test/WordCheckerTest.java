@@ -33,7 +33,7 @@ public class WordCheckerTest extends TestCase {
 		assertTrue("Test bad word in Spanish (es):",wc.isBadWord("Concha de tu madre"));
 		assertTrue("Test bad word in Swedish (sv):",wc.isBadWord("moonade"));
 		assertTrue("Test bad word in Turkish (tr):",wc.isBadWord("otuz bircilerden"));
-		assertTrue("Test good word:",!wc.isBadWord("I love pasta"));	
+		assertTrue("Test good word:",!wc.isBadWord("pasta"));	
 	}
 
 }
