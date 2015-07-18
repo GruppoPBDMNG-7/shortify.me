@@ -36,6 +36,11 @@ public class ShortenerServices {
 		//si ottiene il long url dalla richiesta
 		String url = jsonObject.getString("longurl");
 		
+		//controllo se l'url inizia con http:// o https://
+		if (!url.startsWith("https://") && !url.startsWith("http://")) {
+            url = "http://"+url;
+        } 		
+		
 		DomainChecker dc = new DomainChecker();	
 		if (!dc.isBadDomain(url)) {
 			String customText;
