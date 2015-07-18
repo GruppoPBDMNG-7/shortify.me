@@ -77,4 +77,52 @@ public class CassandraSchema {
 					+ "(" + UCI_SHORT_URL_COLUMN + " text,"
 					+ UCI_IP_COLUMN +" text,"
 					+ "PRIMARY KEY ((" + UCI_SHORT_URL_COLUMN + "), " + UCI_IP_COLUMN + "));";	
+	
+	public static final String CHECK_URL_QUERY = "SELECT " + URLS_SHORT_URL_COLUMN 
+			+ " FROM " + URLS_TABLE 
+			+ " WHERE " + URLS_SHORT_URL_COLUMN + " = ?;";
+	public static final String PUT_URL_QUERY = "INSERT INTO " + URLS_TABLE 
+			+ "(" + URLS_SHORT_URL_COLUMN + ", " 
+			+ URLS_LONG_URL_COLUMN + ") "
+			+ "VALUES (?,?);";
+	public static final String UPDATE_COUNTRY_COUNTER_QUERY = "UPDATE " 
+			+ COUNTRY_COUNTERS_TABLE 
+			+ " SET " + CC_VALUE_COLUMN + " = " 
+			+ CC_VALUE_COLUMN + " + 1 "
+			+ "WHERE " + CC_COUNTRY_COLUMN +" = ? "
+			+ "AND " + CassandraSchema.CC_SHORT_URL_COLUMN + " = ?;";
+	public static final String UPDATE_DAY_COUNTER_QUERY = "UPDATE " + DAY_COUNTERS_TABLE 
+			+ " SET " + DC_VALUE_COLUMN + " = " 
+			+ DC_VALUE_COLUMN + " + 1 "
+			+ "WHERE " + DC_DAY_COLUMN + " = ? "
+			+ "AND " + DC_SHORT_URL_COLUMN + " = ?;";
+	public static final String UPDATE_HOUR_COUNTER_QUERY = "UPDATE " + HOUR_COUNTERS_TABLE 
+			+ " SET " + HC_VALUE_COLUMN 
+			+ " = " + HC_VALUE_COLUMN + " + 1 "
+			+ "WHERE " + HC_HOUR_COLUMN + " = ?"
+			+ "AND " + HC_SHORT_URL_COLUMN + " = ?;";
+	public static final String CHECK_IP_QUERY = "SELECT ip FROM " 
+			+ UNIQUE_COUNTER_IPS_TABLE + " WHERE " 
+			+ UCI_SHORT_URL_COLUMN + " = ? AND " + UCI_IP_COLUMN + " = ?;";
+	public static final String UPDATE_UNIQUE_COUNTER_QUERY = "UPDATE " + UNIQUE_COUNTER_TABLE
+			+ " SET " + UC_VALUE_COLUMN + " = " 
+			+ UC_VALUE_COLUMN + " + 1 WHERE " 
+			+ UC_SHORT_URL_COLUMN + " = ?;";
+	public static final String INSERT_IP_QUERY = "INSERT INTO " 
+			+ UNIQUE_COUNTER_IPS_TABLE 	+ "(" + UCI_SHORT_URL_COLUMN + ", " 
+			+ UCI_IP_COLUMN + ") VALUES " + "(?, ?);";
+	public static final String GET_COUNTRY_COUNTERS_QUERY = "SELECT * FROM " 
+			+ COUNTRY_COUNTERS_TABLE 
+			+ " WHERE " + CC_SHORT_URL_COLUMN + " = ?;";
+	public static final String GET_DAY_COUNTERS_QUERY = "SELECT * FROM " 
+			+ DAY_COUNTERS_TABLE 
+			+ " WHERE " + DC_SHORT_URL_COLUMN + " = ?;";
+	public static final String GET_HOUR_COUNTERS_QUERY = "SELECT * FROM " 
+			+ HOUR_COUNTERS_TABLE 
+			+ " WHERE " + HC_SHORT_URL_COLUMN + " = ?;";
+	public static final String GET_UNIQUE_COUNTER_QUERY = "SELECT * FROM " 
+			+ UNIQUE_COUNTER_TABLE 
+			+ " WHERE " + UC_SHORT_URL_COLUMN + " = ?;";
+	public static final String GET_URL_QUERY = "SELECT * FROM " 
+			+ URLS_TABLE + " WHERE " + URLS_SHORT_URL_COLUMN + " = ?;";
 }

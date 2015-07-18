@@ -17,6 +17,20 @@ public class CassandraDAO implements DAO{
 	private Cluster cluster;
 	private Session session;
 	
+	private PreparedStatement checkUrlPS;
+	private PreparedStatement putUrlPS;
+	private PreparedStatement updateCountryCounterPS;
+	private PreparedStatement updateDayCounterPS;
+	private PreparedStatement updateHourCounterPS;
+	private PreparedStatement updateUniqueCounterPS;
+	private PreparedStatement checkIpPS;
+	private PreparedStatement insertIpPS;
+	private PreparedStatement getCountryCountersPS;
+	private PreparedStatement getDayCountersPS;
+	private PreparedStatement getHourCountersPS;
+	private PreparedStatement getUniqueCounterPS;
+	private PreparedStatement getUrlPS;
+	
 	public CassandraDAO() {
 		initialize();
 	}
@@ -40,14 +54,12 @@ public class CassandraDAO implements DAO{
 	public boolean checkUrl(String shortUrl) {
 		boolean exists = false;
 		
-		PreparedStatement ps = session.prepare("SELECT " + CassandraSchema.URLS_SHORT_URL_COLUMN + " FROM " 
-				+ CassandraSchema.URLS_TABLE + " WHERE " 
-				+ CassandraSchema.URLS_SHORT_URL_COLUMN + " = ?;");
-		BoundStatement bs = ps.bind(shortUrl);
+		if (checkUrlPS == null) {
+			checkUrlPS = session.prepare(CassandraSchema.CHECK_URL_QUERY);
+		}
 		
-		ResultSet rs = session.execute("SELECT " + CassandraSchema.URLS_SHORT_URL_COLUMN + " FROM " 
-				+ CassandraSchema.URLS_TABLE + " WHERE " 
-				+ CassandraSchema.URLS_SHORT_URL_COLUMN + " = '" + shortUrl + "';");
+		BoundStatement bs = checkUrlPS.bind(shortUrl);
+		ResultSet rs = session.execute(bs);
 		
 		try {
 			//Se c'e' almeno una riga viene eseguito, quindi l'url esiste gia'
@@ -63,10 +75,12 @@ public class CassandraDAO implements DAO{
 	
 	@Override
 	public void putUrl(String shortUrl, String longUrl) {
-		session.execute("INSERT INTO " + CassandraSchema.URLS_TABLE 
-				+ "(" + CassandraSchema.URLS_SHORT_URL_COLUMN + ", " 
-				+ CassandraSchema.URLS_LONG_URL_COLUMN + ") "
-				+ "VALUES ('" + shortUrl + "', '" + longUrl + "');");
+		if (putUrlPS == null) {
+			putUrlPS = session.prepare(CassandraSchema.PUT_URL_QUERY);
+		}
+		
+		BoundStatement bs = putUrlPS.bind(shortUrl, longUrl);
+		session.execute(bs);
 	}
 	
 	@Override
@@ -78,57 +92,52 @@ public class CassandraDAO implements DAO{
 	}
 	
 	private void updateCountryCounter(String shortUrl, String country) {
-		session.execute("UPDATE " + CassandraSchema.COUNTRY_COUNTERS_TABLE 
-				+ " SET " + CassandraSchema.CC_VALUE_COLUMN + " = " 
-				+ CassandraSchema.CC_VALUE_COLUMN + " + 1 "
-				+ "WHERE " + CassandraSchema.CC_COUNTRY_COLUMN +" = '" + country + "' "
-				+ "AND " + CassandraSchema.CC_SHORT_URL_COLUMN + " = '" + shortUrl + "';");
+		if (updateCountryCounterPS == null) {
+			updateCountryCounterPS = session.prepare(CassandraSchema.UPDATE_COUNTRY_COUNTER_QUERY);
+		}
+		BoundStatement bs = updateCountryCounterPS.bind(country, shortUrl);
+		session.execute(bs);
 	}
 	
 	private void updateDayCounter(String shortUrl, Calendar date) {
-		String sDate = date.get(Calendar.YEAR) + "-"
-				+ (date.get(Calendar.MONTH) + 1) + "-"
-				+ date.get(Calendar.DAY_OF_MONTH);
-		session.execute("UPDATE " + CassandraSchema.DAY_COUNTERS_TABLE 
-				+ " SET " + CassandraSchema.DC_VALUE_COLUMN + " = " 
-				+ CassandraSchema.DC_VALUE_COLUMN + " + 1 "
-				+ "WHERE " + CassandraSchema.DC_DAY_COLUMN + " = '" + sDate + "' "
-				+ "AND " + CassandraSchema.DC_SHORT_URL_COLUMN + " = '" + shortUrl + "';");
+		if (updateDayCounterPS == null) {
+			updateDayCounterPS = session.prepare(CassandraSchema.UPDATE_DAY_COUNTER_QUERY);
+		}
+		BoundStatement bs = updateDayCounterPS.bind(date.getTime(), shortUrl);
+		session.execute(bs);
 	}
 	
 	private void updateHourCounter(String shortUrl, Calendar date) {
-		String sDate = date.get(Calendar.YEAR) + "-"
-				+ (date.get(Calendar.MONTH) + 1) + "-"
-				+ date.get(Calendar.DAY_OF_MONTH) + " "
-				+ date.get(Calendar.HOUR_OF_DAY) + ":"
-				+ "00";
-		session.execute("UPDATE " + CassandraSchema.HOUR_COUNTERS_TABLE 
-				+ " SET " + CassandraSchema.HC_VALUE_COLUMN 
-				+ " = " + CassandraSchema.HC_VALUE_COLUMN + " + 1 "
-				+ "WHERE " + CassandraSchema.HC_HOUR_COLUMN + " = '" + sDate + "' "
-				+ "AND " + CassandraSchema.HC_SHORT_URL_COLUMN + " = '" + shortUrl + "';");
+		if (updateHourCounterPS == null) {
+			updateHourCounterPS = session.prepare(CassandraSchema.UPDATE_HOUR_COUNTER_QUERY);
+		}
+		BoundStatement bs = updateHourCounterPS.bind(date.getTime(), shortUrl);
+		session.execute(bs);
 	}
 	
 	private void updateUniqueCounter(String shortUrl, String ip) {
-		ResultSet rs = session.execute("SELECT ip FROM " 
-				+ CassandraSchema.UNIQUE_COUNTER_IPS_TABLE + " WHERE " 
-				+ CassandraSchema.UCI_SHORT_URL_COLUMN + " = '" 
-				+ shortUrl + "' AND " + CassandraSchema.UCI_IP_COLUMN 
-				+ " = '" + ip + "';");
+		if (checkIpPS == null) {
+			checkIpPS = session.prepare(CassandraSchema.CHECK_IP_QUERY);
+		}
+		BoundStatement bs = checkIpPS.bind(shortUrl, ip);
+		session.execute(bs);
+		ResultSet rs = session.execute(bs);
 		List<Row> rows = rs.all();
 		
 		if (rows.size() == 0) {
-			/*Se l'ip non e' stato trovato allora verra'  inserito, e il contatore
-			  verra'  incrementato */
-			session.execute("UPDATE " + CassandraSchema.UNIQUE_COUNTER_TABLE
-					+ " SET " + CassandraSchema.UC_VALUE_COLUMN + " = " 
-					+ CassandraSchema.UC_VALUE_COLUMN + " + 1 WHERE " 
-					+ CassandraSchema.UC_SHORT_URL_COLUMN + " = '" + shortUrl + "';");
-			session.execute("INSERT INTO " 
-					+ CassandraSchema.UNIQUE_COUNTER_IPS_TABLE 
-					+ "(" + CassandraSchema.UCI_SHORT_URL_COLUMN + ", " 
-					+ CassandraSchema.UCI_IP_COLUMN + ") VALUES "
-					+ "('" + shortUrl +"', '" + ip + "');");
+			/* If the IP address is not found the unique counter is incremented,
+			 * and the IP address is inserted in the table. */
+			if (updateUniqueCounterPS == null) {
+				updateUniqueCounterPS = session.prepare(CassandraSchema.UPDATE_UNIQUE_COUNTER_QUERY);
+			}
+			bs = updateUniqueCounterPS.bind(shortUrl);
+			session.execute(bs);
+			
+			if (insertIpPS == null) {
+				insertIpPS = session.prepare(CassandraSchema.INSERT_IP_QUERY);
+			}
+			bs = insertIpPS.bind(shortUrl, ip);
+			session.execute(bs);
 		}
 
 	}
@@ -145,22 +154,27 @@ public class CassandraDAO implements DAO{
 		Map<Date, Long> mDay = new HashMap<Date, Long>();
 		Map<Date, Long> mHour = new HashMap<Date, Long>();
 		long unique = 0;
-		ResultSet rsCountry = session.execute("SELECT * FROM " 
-				+ CassandraSchema.COUNTRY_COUNTERS_TABLE 
-				+ " WHERE " + CassandraSchema.CC_SHORT_URL_COLUMN + " = "
-						+ "'" + shortUrl + "';");
-		ResultSet rsDay = session.execute("SELECT * FROM " 
-						+ CassandraSchema.DAY_COUNTERS_TABLE 
-						+ " WHERE " + CassandraSchema.DC_SHORT_URL_COLUMN + " = "
-								+ "'" + shortUrl + "';");
-		ResultSet rsHour = session.execute("SELECT * FROM " 
-				+ CassandraSchema.HOUR_COUNTERS_TABLE 
-				+ " WHERE " + CassandraSchema.HC_SHORT_URL_COLUMN + " = "
-						+ "'" + shortUrl + "';");
-		ResultSet rsUnique = session.execute("SELECT * FROM " 
-						+ CassandraSchema.UNIQUE_COUNTER_TABLE 
-						+ " WHERE " + CassandraSchema.UC_SHORT_URL_COLUMN + " = "
-				+ "'" + shortUrl + "';");
+		
+		if (getCountryCountersPS == null 
+				|| getDayCountersPS == null || getHourCountersPS == null 
+				|| getUniqueCounterPS == null) {
+			getCountryCountersPS = session.prepare(CassandraSchema.GET_COUNTRY_COUNTERS_QUERY);
+			getDayCountersPS = session.prepare(CassandraSchema.GET_DAY_COUNTERS_QUERY);
+			getHourCountersPS = session.prepare(CassandraSchema.GET_HOUR_COUNTERS_QUERY);
+			getUniqueCounterPS = session.prepare(CassandraSchema.GET_UNIQUE_COUNTER_QUERY);
+		}
+		
+		BoundStatement bs = getCountryCountersPS.bind(shortUrl);
+		ResultSet rsCountry = session.execute(bs);
+		
+		bs = getDayCountersPS.bind(shortUrl);
+		ResultSet rsDay = session.execute(bs);
+		
+		bs = getHourCountersPS.bind(shortUrl);
+		ResultSet rsHour = session.execute(bs);
+		
+		bs = getUniqueCounterPS.bind(shortUrl);
+		ResultSet rsUnique = session.execute(bs);
 		
 		for (Row r : rsCountry) {
 			mCountry.put(r.getString(CassandraSchema.CC_COUNTRY_COLUMN), 
@@ -185,10 +199,11 @@ public class CassandraDAO implements DAO{
 	@Override
 	public String getUrl(String shortUrl) {
 		String longUrl = "";
-		
-		ResultSet rs = session.execute("SELECT * FROM " 
-				+ CassandraSchema.URLS_TABLE + " WHERE " 
-				+ CassandraSchema.URLS_SHORT_URL_COLUMN + " = '" + shortUrl + "';");
+		if (getUrlPS == null) {
+			getUrlPS = session.prepare(CassandraSchema.GET_URL_QUERY);
+		}
+		BoundStatement bs = getUrlPS.bind(shortUrl);
+		ResultSet rs = session.execute(bs);
 		
 		for (Row r : rs) {
 			longUrl = r.getString(CassandraSchema.URLS_LONG_URL_COLUMN);
