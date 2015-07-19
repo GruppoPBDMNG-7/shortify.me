@@ -146,19 +146,15 @@ public class ShortenerServices {
 		JSONObject json = new JSONObject(jsonUrl);
 		
 		String url = json.getString("shorturl");
-		
-		try {
-			String[] urlParts = url.split("/");	
-			String shortUrl = urlParts[urlParts.length - 1];
-	
-			if (!dao.checkUrl(shortUrl)) {
-				throw new ShortURLNotFoundException("Short URL non presente nel DB");
-			}
-			json = dao.getStatistics(shortUrl).toJson();
-					
-		} catch(PatternSyntaxException e) {
-			throw new BadURLException("Url non inserito correttamente");
+			
+		String[] urlParts = url.split("/");	
+		String shortUrl = urlParts[urlParts.length - 1];
+
+		if (!dao.checkUrl(shortUrl)) {
+			throw new ShortURLNotFoundException("Short URL non presente nel DB");
 		}
+		json = dao.getStatistics(shortUrl).toJson();
+					
 		return json.toString();
 	}
 }

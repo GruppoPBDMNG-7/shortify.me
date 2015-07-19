@@ -68,7 +68,16 @@ public class Services {
 
 	private static void setIspezioneUrl(ShortenerServices ss) {
 		post(API_CONTEXT + API.STATS, (request, response) -> {
-			return ss.ispezionaURL(request.body());
+			String statistiche = "";
+			
+			try {
+				statistiche = ss.ispezionaURL(request.body());
+				
+			} catch (ShortURLNotFoundException e) {
+				System.err.println(e.getMessage());
+    			response.status(404);
+			}
+			return statistiche;
 		});
 	}
 	
