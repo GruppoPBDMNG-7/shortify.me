@@ -9,9 +9,11 @@
     <script src="js/controllers/urlStatistics.js"></script>
     <script src="js/angular-chart/Chart.js"></script>
     <script src="js/angular-chart/angular-chart.js"></script>
+    <script src="js/angular-spinner/angular-spinkit.min.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/angular-chart.css">
     <link rel="stylesheet" href="css/flag-icon.css">
+    <link rel="stylesheet" href="css/angular-spinkit.min.css">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
 </head>
@@ -45,7 +47,7 @@
             <img  alt="Shortify.me" src="images/shortify_logo.png" />
         </div>
         
-        <div id="shortify" ng-hide="!notStatisticsView" ng-controller="urlStatistics">
+        <div id="shortify" ng-controller="urlStatistics">
             <div id="longURLDiv" ng-show="!customURLView">
                 <form name="urlInputForm" class="form-inline centeredText">
                     <div class="form-group">
@@ -77,6 +79,7 @@
                     </div>
                 </form>
             </div>
+            <chasing-dots-spinner ng-show="showSpinner"></chasing-dots-spinner>   
         </div>
 
         
@@ -92,8 +95,11 @@
         </div>
 
         <div id="statisticsDiv" class="well" ng-controller="urlStatistics" ng-hide="notStatisticsView">
-        
-        <!-- HEADER -->
+            
+            <div class="centeredText alert alert-success">
+                <h4><strong>Short URL inspected</strong>: http://www.shortify.com/{{shortUrl}}</h4>
+                <h4><strong>Related Long URL</strong>: <a href="{{longUrl}}" target="_blank">{{longUrl}}</a></h4>
+            </div>   
         
         <div>
             <canvas id="line" class="chart chart-line" data="data" labels="labels" series="series" legend="true"></canvas>
@@ -107,8 +113,8 @@
                 <table id="country-table" class="table">
                     <thead>
                       <tr>
-                        <th>Nazione</th>
-                        <th>Visite</th>
+                        <th>Country</th>
+                        <th>Visits</th>
                       </tr>
                     </thead>
                     <tbody id="country-table-rows"></tbody>
@@ -118,8 +124,8 @@
                 <table id="days-table" class="table">
                     <thead>
                         <tr>
-                            <th>Giorno</th>
-                            <th>Visite</th>
+                            <th>Day</th>
+                            <th>Visits</th>
                         </tr>
                     </thead>
                     <tbody id="days-table-rows"></tbody>
