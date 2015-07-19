@@ -55,3 +55,15 @@ Ogni tabella è dotata di una propria chiave primaria: nel caso di countrycounte
  - Una clustering key
 
 Per ciascuna column family, tutte le righe che hanno la stessa partition key sono memorizzate nello stesso nodo (partizione), trattandole effettivamente come se fossero una singola riga, dotata di più colonne. (fonte: http://intellidzine.blogspot.it/2014/01/cassandra-data-modelling-primary-keys.html)
+
+###DAO
+È stata realizzata un'interfaccia per il Data Access Object, contenente tutti i metodi necessari per realizzare le varie funzionalità del sistema, e una sua implementazione, CassandraDAO.
+
+CassandraDAO comunica con il database attraverso la libreria cassandra-driver-core fornita da Datastax (versione 2.1.5).
+
+Per ottimizzare l'esecuzione delle query, e per evitare problemi relativi a tentativi di injection, sono stati utilizzati oggetti della classe PreparedStatement.
+
+La classe CassandraSchema contiene tutte le costanti utilizzate per la definizione dello schema del database, per i nomi di keyspace, column family, e colonne.
+
+###Statistiche
+La classe Statistics è stata utilizzata per impacchettare tutti i dati relativi alle statistiche ottenuti dal database. Contiene i dati relativi al long url, lo short url, e tutti i contatori definiti in precedenza. Si occupa inoltre della serializzazione di queste statistiche in formato JSON, in maniera da poter quindi essere inviate in rete.
