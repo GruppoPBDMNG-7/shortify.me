@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
@@ -100,23 +101,32 @@ public class CassandraDAO implements DAO{
 	}
 	
 	private void updateDayCounter(String shortUrl, Calendar date) {
-		date.set(Calendar.HOUR_OF_DAY, 0);
-		date.set(Calendar.MINUTE, 0);
-		date.set(Calendar.SECOND, 0);
+		Calendar dClone = (Calendar) date.clone();
+		dClone.set(Calendar.HOUR_OF_DAY, 0);
+		dClone.set(Calendar.MINUTE, 0);
+		dClone.set(Calendar.SECOND, 0);
+		dClone.set(Calendar.MILLISECOND,0);
+		dClone.setTimeZone(TimeZone.getTimeZone("UTC"));
 		if (updateDayCounterPS == null) {
 			updateDayCounterPS = session.prepare(CassandraSchema.UPDATE_DAY_COUNTER_QUERY);
 		}
-		BoundStatement bs = updateDayCounterPS.bind(date.getTime(), shortUrl);
+		BoundStatement bs = updateDayCounterPS.bind(dClone.getTime(), shortUrl);
 		session.execute(bs);
 	}
 	
 	private void updateHourCounter(String shortUrl, Calendar date) {
-		date.set(Calendar.MINUTE, 0);
-		date.set(Calendar.SECOND, 0);
+		Calendar dClone = (Calendar) date.clone();
+		dClone.setTimeZone(TimeZone.getTimeZone("UTC"));
+		System.out.println(dClone.getTime());
+		dClone.set(Calendar.MINUTE, 0);
+		dClone.set(Calendar.SECOND, 0);
+		dClone.set(Calendar.MILLISECOND,0);
+
+		System.out.println(dClone.getTime());
 		if (updateHourCounterPS == null) {
 			updateHourCounterPS = session.prepare(CassandraSchema.UPDATE_HOUR_COUNTER_QUERY);
 		}
-		BoundStatement bs = updateHourCounterPS.bind(date.getTime(), shortUrl);
+		BoundStatement bs = updateHourCounterPS.bind(dClone.getTime(), shortUrl);
 		session.execute(bs);
 	}
 	
