@@ -41,3 +41,6 @@ Restituisce l'oggetto Statistics che contiene campi, i quali rappresentano le va
 		-getUrl
 Restituisce una stringa che rappresenta il long url associato a uno short url. In particolare si è testato che restituisse una stringa vuota se lo short url fosse inesistente e una stringa prestabilita con uno short url prestabilito. 
 		
+#####6. Statistics (pkg: me.shortify.dao) testando il metodo:
+		-toJson
+Restituisce una stringa contenente tutti i dati relativi alle statistiche, realizzata in formato JSON. Obiettivo del test è quello di verificare che la struttura dell'oggetto restituito fosse corretta. Si sono utilizzati dei casi di test tipici, contenenti insiemi di dati standard, e un caso limite, corrispondente ad un oggetto non contenente nessun contatore.
