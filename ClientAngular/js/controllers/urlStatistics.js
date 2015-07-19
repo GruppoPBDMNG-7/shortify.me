@@ -22,18 +22,13 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
                 $http.post("http://localhost:4567/api/v1/stats", {shorturl: urlforstat})
                 .success(function(response) {
                     
-                    
                     //Ottengo dati per statistiche dalla response
                     var hourCounters = response.hourCounters;
                     $scope.uniqueCounter = response.uniqueCounter;
                     var countryCounters = response.countryCounters;
                     dayCounters = response.dayCounters;
-                    
-                    /*console.log(hourCounters);
-                    console.log(uniqueCounter);
-                    console.log(countryCounters);
-                    console.log(dayCounters);*/
-                    
+                    $scope.longUrl = response.longUrl;
+                    $scope.shortUrl = response.shortUrl;
                     
                     //BAR CHART statistiche intervalli orari
                     var labels = Object.keys(hourCounters).sort();
@@ -46,7 +41,7 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
                     
                     //Dati utili per il grafico canvas
                     $rootScope.labels = labels;
-                    $rootScope.series = ['Hour'];
+                    $rootScope.series = ['Visits per hour'];
                     $rootScope.data = [perHour];
                     
                    
