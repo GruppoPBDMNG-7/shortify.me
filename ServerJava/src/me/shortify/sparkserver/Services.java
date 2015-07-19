@@ -17,7 +17,7 @@ public class Services {
 	
 	public static void setupEndpoints() {			
 		ShortenerServices shortenerServices = new ShortenerServices(new CassandraDAO());
-		
+		set404();
 		setConversione(shortenerServices);
     	setVisitaShortUrl(shortenerServices); 
     	setIspezioneUrl(shortenerServices);
@@ -49,6 +49,12 @@ public class Services {
     	});
 	}
 	
+	private static void set404() {
+		get("/404.html", (request, response) -> {
+			return null;
+		});
+	}
+	
 	private static void setVisitaShortUrl(ShortenerServices ss) {
     	get("/:goto", (request, response) -> {
     		
@@ -58,8 +64,7 @@ public class Services {
     			
     		} catch(ShortURLNotFoundException e) {
     			System.err.println(e.getMessage());
-    			response.status(404);
-    			//TODO Risolvere il redirect a 404
+				response.redirect("404.html");
     		}
 
     		return null;		
@@ -75,7 +80,7 @@ public class Services {
 				
 			} catch (ShortURLNotFoundException e) {
 				System.err.println(e.getMessage());
-    			response.status(404);
+				response.redirect("404.html");
 			}
 			return statistiche;
 		});
