@@ -100,6 +100,9 @@ public class CassandraDAO implements DAO{
 	}
 	
 	private void updateDayCounter(String shortUrl, Calendar date) {
+		date.set(Calendar.HOUR_OF_DAY, 0);
+		date.set(Calendar.MINUTE, 0);
+		date.set(Calendar.SECOND, 0);
 		if (updateDayCounterPS == null) {
 			updateDayCounterPS = session.prepare(CassandraSchema.UPDATE_DAY_COUNTER_QUERY);
 		}
@@ -108,6 +111,8 @@ public class CassandraDAO implements DAO{
 	}
 	
 	private void updateHourCounter(String shortUrl, Calendar date) {
+		date.set(Calendar.MINUTE, 0);
+		date.set(Calendar.SECOND, 0);
 		if (updateHourCounterPS == null) {
 			updateHourCounterPS = session.prepare(CassandraSchema.UPDATE_HOUR_COUNTER_QUERY);
 		}
