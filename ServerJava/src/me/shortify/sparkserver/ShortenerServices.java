@@ -3,6 +3,7 @@ package me.shortify.sparkserver;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Calendar;
+import java.util.regex.PatternSyntaxException;
 
 import me.shortify.dao.DAO;
 import me.shortify.sparkserver.exception.BadCustomURLException;
@@ -35,6 +36,10 @@ public class ShortenerServices {
 		
 		//si ottiene il long url dalla richiesta
 		String url = jsonObject.getString("longurl");
+		
+		if (url.equals("")) {
+			throw new BadURLException("Url non inserito");
+		}
 		
 		//controllo se l'url inizia con http:// o https://
 		if (!url.startsWith("https://") && !url.startsWith("http://")) {
@@ -138,16 +143,22 @@ public class ShortenerServices {
 	}
 	
 	public String ispezionaURL(String jsonUrl) {
-		//TODO da inserire controlli
 		JSONObject json = new JSONObject(jsonUrl);
 		
 		String url = json.getString("shorturl");
-		String[] urlParts = url.split("/");
 		
-		String shortUrl = urlParts[urlParts.length - 1];
-
-		json = dao.getStatistics(shortUrl).toJson();
-		
+		try {
+			String[] urlParts = url.split("/");	
+			String shortUrl = urlParts[urlParts.length - 1];
+	
+			if (!dao.checkUrl(shortUrl)) {
+				throw new ShortURLNotFoundException("Short URL non presente nel DB");
+			}
+			json = dao.getStatistics(shortUrl).toJson();
+					
+		} catch(PatternSyntaxException e) {
+			throw new BadURLException("Url non inserito correttamente");
+		}
 		return json.toString();
 	}
 }
