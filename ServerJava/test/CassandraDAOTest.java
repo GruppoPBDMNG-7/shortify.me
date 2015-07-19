@@ -8,6 +8,13 @@ import junit.framework.TestCase;
 
 public class CassandraDAOTest extends TestCase {
 
+	private String[] checkUrlTest = {
+			"provaSU!",//controlla url esistente
+			"provasu!",//controlla case sensitive
+			"NonEsiste!"//controlla short url non esistente
+			};
+	private boolean[] checkUrlResult = {true,false,false};
+	
 	CassandraDAO cd;
 	protected void setUp() throws Exception {
 		cd = new CassandraDAO();
@@ -22,12 +29,10 @@ public class CassandraDAOTest extends TestCase {
 	public void testCheckUrl() {
 		
 		cd.putUrl("provaSU!","www.provaShortUrl.com");
-		//controlla url esistente
-		assertTrue("Il risultato è "+cd.checkUrl("provaSU!"),cd.checkUrl("provaSU!"));
-		//controlla case sensitive
-		assertTrue("Il risultato è "+cd.checkUrl("provasu!"),!cd.checkUrl("provasu!"));
-		//controlla short url non esistente
-		assertTrue("Il risultato è "+cd.checkUrl("NonEsiste!"),!cd.checkUrl("NonEsiste!"));
+		for(int i = 0; i < checkUrlTest.length ; i++){
+		assertTrue("Il risultato è "+cd.checkUrl(checkUrlTest[i]),cd.checkUrl(checkUrlTest[i]) == checkUrlResult[i]);
+		}
+	
 	}
 
 	public void testPutUrl() {

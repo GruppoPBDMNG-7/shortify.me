@@ -8,7 +8,12 @@ import junit.framework.TestCase;
 
 public class CountryIPInformationTest extends TestCase {
 
+	private String[] listIp = {"208.78.164.1","185.25.180.1","146.66.158.1"
+			,"5.101.162.152","37.220.25.157","151.100.72.99"};
+	
+	private String[] listCountry ={"US","SE","LU","DE","GB","IT"};
 	CountryIPInformation cIPi;
+	
 	protected void setUp() throws Exception {
 		cIPi = new CountryIPInformation();
 		super.setUp();
@@ -20,23 +25,12 @@ public class CountryIPInformationTest extends TestCase {
 	}
 
 	public void testGetCountry() throws IOException, GeoIp2Exception {
-			assertTrue("It isn't an American ip but "+ cIPi.getCountry("208.78.164.1")+ ":",
-					cIPi.getCountry("208.78.164.1").equalsIgnoreCase("US"));
+		
+		for(int i = 0; i< listIp.length ;i++){
 			
-			assertTrue("It isn't a Sweden ip but "+ cIPi.getCountry("185.25.180.1")+ ":",
-					cIPi.getCountry("185.25.180.1").equalsIgnoreCase("SE"));
-			
-			assertTrue("It isn't a Luxemburg ip but "+ cIPi.getCountry("146.66.158.1")+ ":",
-					cIPi.getCountry("146.66.158.1").equalsIgnoreCase("LU"));
-			
-			assertTrue("It isn't a German ip but "+ cIPi.getCountry("5.101.162.152")+ ":",
-					cIPi.getCountry("5.101.162.152").equalsIgnoreCase("DE"));
-			
-			assertTrue("It isn't a Great Britain ip but "+ cIPi.getCountry("37.220.25.157")+ ":",
-					cIPi.getCountry("37.220.25.157").equalsIgnoreCase("GB"));
-			
-			assertTrue("It isn't an Italian ip but "+ cIPi.getCountry("151.100.72.99")+ ":",
-					cIPi.getCountry("151.100.72.99").equalsIgnoreCase("IT"));
+			assertTrue("It isn't an "+listCountry[i]+" ip but "+ cIPi.getCountry(listIp[i])+ ":",
+					cIPi.getCountry(listIp[i]).equalsIgnoreCase(listCountry[i]));
+		}
 	}
 
 }
