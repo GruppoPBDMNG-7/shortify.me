@@ -74,8 +74,8 @@ public class Statistics {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		for (Map.Entry<Date, Long> e : dayCounters.entrySet()) {
 			Calendar c = new GregorianCalendar();
+			c.setTimeZone(TimeZone.getTimeZone("UTC"));
 			c.setTime(e.getKey());
-			sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 			sdf.setCalendar(c);
 			String date = sdf.format(c.getTime());
 			dayJS.put(date, e.getValue());
@@ -86,8 +86,9 @@ public class Statistics {
 		JSONObject hourJS = new JSONObject();
 		for (Map.Entry<Date, Long> e : hourCounters.entrySet()) {
 			Calendar c = new GregorianCalendar();
+			c.setTimeZone(TimeZone.getTimeZone("UTC"));
 			c.setTime(e.getKey());
-			sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+			//sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 			sdf.setCalendar(c);
 			String date = sdf.format(c.getTime());			
 			hourJS.put(date, e.getValue());
