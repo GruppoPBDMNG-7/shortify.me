@@ -3,7 +3,7 @@ package me.shortify.sparkserver;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Calendar;
-import java.util.regex.PatternSyntaxException;
+import java.util.TimeZone;
 
 import me.shortify.dao.DAO;
 import me.shortify.sparkserver.exception.BadCustomURLException;
@@ -134,7 +134,9 @@ public class ShortenerServices {
 		System.out.println("Country: " +  country);
 		System.out.println("Long Url:" + longUrl);
 		
-		if (!longUrl.equals("")) {  		
+		if (!longUrl.equals("")) { 
+			Calendar c = Calendar.getInstance();
+			c.setTimeZone(TimeZone.getTimeZone("UTC"));
 			dao.updateUrlStatistics(shortUrl, country, ip, Calendar.getInstance());
 		} else {
 			throw new ShortURLNotFoundException("Short URL non presente nel DB");
@@ -154,7 +156,9 @@ public class ShortenerServices {
 		if (!dao.checkUrl(shortUrl)) {
 			throw new ShortURLNotFoundException("Short URL non presente nel DB");
 		}
-		json = dao.getStatistics(shortUrl, Calendar.getInstance(), HOUR_COUNTER_INTERVAL).toJson();
+		Calendar c = Calendar.getInstance();
+		c.setTimeZone(TimeZone.getTimeZone("UTC"));
+		json = dao.getStatistics(shortUrl, c, HOUR_COUNTER_INTERVAL).toJson();
 					
 		return json.toString();
 	}

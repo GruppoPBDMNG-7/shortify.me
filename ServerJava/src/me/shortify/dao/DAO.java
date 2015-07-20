@@ -4,44 +4,51 @@ import java.util.Calendar;
 
 public interface DAO {
 	/**
-	 * Controlla se un url è presente nel Database o meno
-	 * @param shortUrl lo short url da verificare
-	 * @return true se lo short url è presente, false altrimenti
+	 * Checks if a short url is present in the database.
+	 * @param shortUrl short url to check
+	 * @return true if the short url is present, false otherwise
 	 */
+	
 	public boolean checkUrl(String shortUrl);
 	/**
-	 * Inserisce un url nel database.
-	 * @param shortUrl short url da inserire
-	 * @param longUrl long url da iserire
+	 * Inserts a new short url and long url in the database.
+	 * @param shortUrl short url to insert
+	 * @param longUrl long url to insert
 	 */
 	public void putUrl(String shortUrl, String longUrl);
+	
 	/**
-	 * Aggiorna i contatori delle visite dello short url selezionato
-	 * @param shortUrl short url di cui bisogna aggiornare i contatori
-	 * @param country paese di provenienza della visita
-	 * @param ip ip di provenienza della visita
-	 * @param date data e ora in cui si è verificata la visita
+	 * Update the click counters for the selected short url
+	 * @param shortUrl the short url to update
+	 * @param country country of the visitor
+	 * @param ip ip address of the visitor
+	 * @param date date and time of the click
 	 */
 	public void updateUrlStatistics(String shortUrl, String country, String ip, Calendar date);
+	
 	/**
-	 * Restituisce il long url associato ad uno short url, se questo esiste.
-	 * @param shortUrl short url di cui si intende prendere il long url
+	 * Retrieves the long url of the associated short url.
+	 * @param shortUrl the short url
 	 * @return
 	 */
 	public String getUrl(String shortUrl);
+	
 	/**
-	 * Ottiene l'oggetto contenente tutte le statistiche dello short url selezionato.
-	 * @param shortUrl short url di cui si vogliono ottenere le statistiche
-	 * @param date data e ora a cui avviene la richiesta
-	 * @param nOfHours numero di ore precedenti alla data corrente, delle quali
-	 * 		  si intende ottenere i contatori per ora. Ad esempio, se la data corrente
-	 * 		  è 2015-07-20 8:00, e il parametro è 24, si otterranno tutti i 
-	 * 		  contatori delle visite a partire da quello del 2015-07-19 8:00.
+	 * Returns the object containing the statistics for the selected short url.
+	 * @param shortUrl short url of which the statistics will be retrieved.
+	 * @param date date and time of the request
+	 * @param nOfHours number of hours previous of the current date, it is
+	 * 		  used to determined from when to start retrieving the counters by hour. 
+	 * 		  For example, if the current time is 2015-07-20 8:00, 
+	 * 		  and the parameter is 24, all hour counters starting
+	 * 	      from 2015-07-19 8:00 will be retrieved.
+	 * 		  Note: if nOfHours is set to 0, all hour counters will be retrieved.
 	 * @return
 	 */
 	public Statistics getStatistics(String shortUrl, Calendar date, int nOfHours);
+	
 	/**
-	 * Chiude il collegamento al database e libera le eventuali risorse occupate.
+	 * Closes the DB connections and frees the used resources.
 	 */
 	public void close();
 }

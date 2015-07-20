@@ -1,5 +1,6 @@
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import me.shortify.dao.CassandraDAO;
 import me.shortify.dao.Statistics;
@@ -45,11 +46,12 @@ public class CassandraDAOTest extends TestCase {
 	}
 
 	public void testUpdateUrlStatistics() {
-		
+		Calendar c = Calendar.getInstance();
+		c.setTimeZone(TimeZone.getTimeZone("UTC"));
 		cd.putUrl("statsTestB","www.statsTest.com");
-		cd.updateUrlStatistics("statsTestB", "IT", "127.0.0.1", Calendar.getInstance());
+		cd.updateUrlStatistics("statsTestB", "IT", "127.0.0.1", c);
 		
-		Statistics st = cd.getStatistics("statsTestB", Calendar.getInstance(), 0);		
+		Statistics st = cd.getStatistics("statsTestB", c, 0);		
 		Object[] cDay = st.getDayCounters().keySet().toArray();		
 		Object[] HDay = st.getHourCounters().keySet().toArray();	
 		//Controlla se ha aggiornato il contatore country
@@ -64,11 +66,12 @@ public class CassandraDAOTest extends TestCase {
 	}
 
 	public void testGetStatistics() {
-	
+		Calendar c = Calendar.getInstance();
+		c.setTimeZone(TimeZone.getTimeZone("UTC"));
 		cd.putUrl("statsTestA","www.statsTest.com");
-		cd.updateUrlStatistics("statsTestA", "IT", "127.0.0.1", Calendar.getInstance());
+		cd.updateUrlStatistics("statsTestA", "IT", "127.0.0.1", c);
 		
-		Statistics st = cd.getStatistics("statsTestA", Calendar.getInstance(), 0);		
+		Statistics st = cd.getStatistics("statsTestA", c, 0);		
 		Object[] cDay = st.getDayCounters().keySet().toArray();		
 		Object[] HDay = st.getHourCounters().keySet().toArray();	
 		//Controlla se è congruente il contatore country
@@ -88,7 +91,7 @@ public class CassandraDAOTest extends TestCase {
 				st.getUniqueViews() == 1);
 		//Controlla se è congruente il contatore di visite uniche dopo una visita ulteriore da parte
 		//dello stesso ip.
-		cd.updateUrlStatistics("statsTestB", "IT", "127.0.0.1", Calendar.getInstance());
+		cd.updateUrlStatistics("statsTestB", "IT", "127.0.0.1", c);
 		assertTrue("Le visite uniche sono "+st.getUniqueViews()+" invece di 1 con un accesso ulteriore dallo stesso ip",
 				st.getUniqueViews() == 1);
 	}

@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
@@ -29,6 +28,7 @@ public class CassandraDAO implements DAO{
 	private PreparedStatement getCountryCountersPS;
 	private PreparedStatement getDayCountersPS;
 	private PreparedStatement getHourCountersPS;
+	private PreparedStatement getHourCountersLimitedPS;
 	private PreparedStatement getUniqueCounterPS;
 	private PreparedStatement getUrlPS;
 	
@@ -106,7 +106,6 @@ public class CassandraDAO implements DAO{
 		dClone.set(Calendar.MINUTE, 0);
 		dClone.set(Calendar.SECOND, 0);
 		dClone.set(Calendar.MILLISECOND,0);
-		dClone.setTimeZone(TimeZone.getTimeZone("UTC"));
 		if (updateDayCounterPS == null) {
 			updateDayCounterPS = session.prepare(CassandraSchema.UPDATE_DAY_COUNTER_QUERY);
 		}
@@ -116,7 +115,6 @@ public class CassandraDAO implements DAO{
 	
 	private void updateHourCounter(String shortUrl, Calendar date) {
 		Calendar dClone = (Calendar) date.clone();
-		dClone.setTimeZone(TimeZone.getTimeZone("UTC"));
 		System.out.println(dClone.getTime());
 		dClone.set(Calendar.MINUTE, 0);
 		dClone.set(Calendar.SECOND, 0);
@@ -173,11 +171,12 @@ public class CassandraDAO implements DAO{
 		
 		if (getCountryCountersPS == null 
 				|| getDayCountersPS == null || getHourCountersPS == null 
-				|| getUniqueCounterPS == null) {
+				|| getUniqueCounterPS == null || getHourCountersLimitedPS == null) {
 			getCountryCountersPS = session.prepare(CassandraSchema.GET_COUNTRY_COUNTERS_QUERY);
 			getDayCountersPS = session.prepare(CassandraSchema.GET_DAY_COUNTERS_QUERY);
 			getHourCountersPS = session.prepare(CassandraSchema.GET_HOUR_COUNTERS_QUERY);
 			getUniqueCounterPS = session.prepare(CassandraSchema.GET_UNIQUE_COUNTER_QUERY);
+			getHourCountersLimitedPS = session.prepare(CassandraSchema.GET_HOUR_COUNTERS_QUERY_LIMITED);
 		}
 		
 		BoundStatement bs = getCountryCountersPS.bind(shortUrl);
@@ -186,9 +185,13 @@ public class CassandraDAO implements DAO{
 		bs = getDayCountersPS.bind(shortUrl);
 		ResultSet rsDay = session.execute(bs);
 		
-		date.add(Calendar.HOUR_OF_DAY, - nOfHours);
-		
-		bs = getHourCountersPS.bind(shortUrl, date.getTime());
+		if (nOfHours > 0) {
+			date.add(Calendar.HOUR_OF_DAY, - nOfHours);
+			bs = getHourCountersLimitedPS.bind(shortUrl, date.getTime());
+		} else {
+			bs = getHourCountersPS.bind(shortUrl);
+		}
+
 		ResultSet rsHour = session.execute(bs);
 		
 		bs = getUniqueCounterPS.bind(shortUrl);
