@@ -67,3 +67,10 @@ La classe CassandraSchema contiene tutte le costanti utilizzate per la definizio
 
 ###Statistiche
 La classe Statistics è stata utilizzata per impacchettare tutti i dati relativi alle statistiche ottenuti dal database. Contiene i dati relativi al long url, lo short url, e tutti i contatori definiti in precedenza. Si occupa inoltre della serializzazione di queste statistiche in formato JSON, in maniera da poter quindi essere inviate in rete.
+
+###Server
+Il server è stato sviluppato utilizzando il framework **Spark java** la cui semplicità ha permesso una rapida costruzione delle componenti server principali. Attraverso l'utilizzo di semplici metodi di cattura delle richieste GET e POST effettuate dal client, si sono forniti diversi servizi cui accesso avviene attraverso una serie di API RESTful. 
+
+La classe Bootstrap è l'entry point del server; la responsabilità principale consiste nel settaggio dei diversi *end points* e delle varie opzioni di configurazione del server.
+
+La cattura delle richieste inviate dal client avviene nella classe Services, che per ognuna di esse esegue i diversi servizi di shortening disponibili. Per seperare le responsabilità della cattura delle richieste, dell'invio delle risposte al client, con eventuali messaggi di errore, dalla responsabilità di eseguire i servizi di shortening, chiamando il DAO per l'accesso al database, si è sviluppata la classe ShortenerServices, cui istanza creata una sola volta in Services contiene il riferimento ad un oggetto che implementa il DAO.
