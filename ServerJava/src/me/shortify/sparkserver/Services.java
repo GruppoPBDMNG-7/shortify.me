@@ -7,8 +7,11 @@ import static spark.Spark.post;
 import me.shortify.dao.CassandraDAO;
 import me.shortify.sparkserver.exception.BadCustomURLException;
 import me.shortify.sparkserver.exception.BadURLException;
+import me.shortify.sparkserver.exception.Error;
 import me.shortify.sparkserver.exception.ShortURLNotFoundException;
 import me.shortify.sparkserver.exception.URLExistsException;
+
+
 
 public class Services {
 	
@@ -27,25 +30,28 @@ public class Services {
 	
 	private static void setConversione(ShortenerServices ss) {
 		post(API_CONTEXT + API.CONVERT, (request, response) -> {	
-			String shortUrl = null;
+			String result = null;
 			
 			try {
-				shortUrl = ss.conversioneURL(request.body());
+				result = ss.conversioneURL(request.body());
 				
 			} catch(URLExistsException e) {
 				System.err.println(e.getMessage());
-				response.status(401);
+				result = new Error(Error.URL_EXISTS).toJsonString();
+				response.status(500);
 				
 			} catch(BadCustomURLException e) {
 				System.err.println(e.getMessage());
-				response.status(401);
+				result = new Error(Error.BAD_CUSTOM_URL).toJsonString();
+				response.status(500);
 				
 			} catch(BadURLException e) {
 				System.err.println(e.getMessage());
-				response.status(401);
+				result = new Error(Error.BAD_URL).toJsonString();
+				response.status(400);
 			}
 			
-			return shortUrl;
+			return result;
     	});
 	}
 	
