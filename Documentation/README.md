@@ -10,5 +10,5 @@ Un URL Shortener è un servizio web il cui scopo è ridurre l’indirizzo di una
 - [Modello dei dati](https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/Modello%20dei%20dati.md)
 - [Scelta del database NoSQL](https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/Scelta%20del%20database%20NoSQL.md)
 - [Implementazione](https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/Implementazione.md)
-- Codice
-- Test
+- [Codice](https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/Codice.md)
+- [Test](https://github.com/GruppoPBDMNG-7/shortify.me/blob/master/Documentation/Test.md)
