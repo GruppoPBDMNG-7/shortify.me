@@ -8,4 +8,5 @@ public interface DAO {
 	public void updateUrlStatistics(String shortUrl, String country, String ip, Calendar date);
 	public String getUrl(String shortUrl);
 	public Statistics getStatistics(String shortUrl);
+	public void close();
 }

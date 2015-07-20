@@ -46,8 +46,15 @@ public class FakeDAO implements DAO {
 		return null;
 	}
 	
+	
+	
 	public static final void main(String a[]) {
 		System.out.println(new FakeDAO().getStatistics("prova").toJson());
+	}
+
+	@Override
+	public void close() {
+		return;
 	}
 
 }
