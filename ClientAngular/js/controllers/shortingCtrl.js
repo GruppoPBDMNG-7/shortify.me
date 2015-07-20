@@ -43,7 +43,8 @@ app.controller('shortingCtrl', function($scope, $http, $timeout) {
                     $scope.showSpinner = false;
                     $scope.done = true;
                 })
-                .error(function() {
+                .error(function(response) {
+                    $scope.textError = response.error;
                     document.getElementById("errorDiv").setAttribute("class", "alert alert-danger centeredText animated fadeIn");  
                     $scope.showSpinner = false;
                     $scope.error = true;
