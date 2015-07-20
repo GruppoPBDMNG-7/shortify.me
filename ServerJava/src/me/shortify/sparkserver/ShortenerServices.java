@@ -24,6 +24,7 @@ import com.maxmind.geoip2.exception.GeoIp2Exception;
 public class ShortenerServices {
 	
 	private static final int MAX_COUNT = 10;
+	private static final int HOUR_COUNTER_INTERVAL = 36;
 	
 	private DAO dao;
 	
@@ -153,7 +154,7 @@ public class ShortenerServices {
 		if (!dao.checkUrl(shortUrl)) {
 			throw new ShortURLNotFoundException("Short URL non presente nel DB");
 		}
-		json = dao.getStatistics(shortUrl).toJson();
+		json = dao.getStatistics(shortUrl, Calendar.getInstance(), HOUR_COUNTER_INTERVAL).toJson();
 					
 		return json.toString();
 	}

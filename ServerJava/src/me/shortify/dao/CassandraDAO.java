@@ -157,13 +157,14 @@ public class CassandraDAO implements DAO{
 
 	}
 	
+	@Override
 	public void close() {
 		cluster.close();
 		session = null;
 	}
 
 	@Override
-	public Statistics getStatistics(String shortUrl) {
+	public Statistics getStatistics(String shortUrl, Calendar date, int nOfHours) {
 		String longUrl = getUrl(shortUrl);
 		Map<String, Long> mCountry = new HashMap<String, Long>();
 		Map<Date, Long> mDay = new HashMap<Date, Long>();
@@ -185,7 +186,9 @@ public class CassandraDAO implements DAO{
 		bs = getDayCountersPS.bind(shortUrl);
 		ResultSet rsDay = session.execute(bs);
 		
-		bs = getHourCountersPS.bind(shortUrl);
+		date.add(Calendar.HOUR_OF_DAY, - nOfHours);
+		
+		bs = getHourCountersPS.bind(shortUrl, date.getTime());
 		ResultSet rsHour = session.execute(bs);
 		
 		bs = getUniqueCounterPS.bind(shortUrl);

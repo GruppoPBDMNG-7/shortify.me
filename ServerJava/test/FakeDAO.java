@@ -37,7 +37,7 @@ public class FakeDAO implements DAO {
 	}
 
 	@Override
-	public Statistics getStatistics(String shortUrl) {
+	public Statistics getStatistics(String shortUrl, Calendar date, int nOfHours) {
 		
 		if (shortUrl.equals("urlEsistente")) {
 			return new Statistics("long", "urlEsistente", new HashMap(), new HashMap(), new HashMap(), 0);
@@ -49,7 +49,7 @@ public class FakeDAO implements DAO {
 	
 	
 	public static final void main(String a[]) {
-		System.out.println(new FakeDAO().getStatistics("prova").toJson());
+		System.out.println(new FakeDAO().getStatistics("prova", Calendar.getInstance(), 0).toJson());
 	}
 
 	@Override

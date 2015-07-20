@@ -119,7 +119,7 @@ public class CassandraSchema {
 			+ " WHERE " + DC_SHORT_URL_COLUMN + " = ?;";
 	public static final String GET_HOUR_COUNTERS_QUERY = "SELECT * FROM " 
 			+ HOUR_COUNTERS_TABLE 
-			+ " WHERE " + HC_SHORT_URL_COLUMN + " = ?;";
+			+ " WHERE " + HC_SHORT_URL_COLUMN + " = ? AND " + HC_HOUR_COLUMN + " > ?;";
 	public static final String GET_UNIQUE_COUNTER_QUERY = "SELECT * FROM " 
 			+ UNIQUE_COUNTER_TABLE 
 			+ " WHERE " + UC_SHORT_URL_COLUMN + " = ?;";

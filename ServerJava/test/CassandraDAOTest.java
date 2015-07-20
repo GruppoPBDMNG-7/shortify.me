@@ -49,7 +49,7 @@ public class CassandraDAOTest extends TestCase {
 		cd.putUrl("statsTestB","www.statsTest.com");
 		cd.updateUrlStatistics("statsTestB", "IT", "127.0.0.1", Calendar.getInstance());
 		
-		Statistics st = cd.getStatistics("statsTestB");		
+		Statistics st = cd.getStatistics("statsTestB", Calendar.getInstance(), 0);		
 		Object[] cDay = st.getDayCounters().keySet().toArray();		
 		Object[] HDay = st.getHourCounters().keySet().toArray();	
 		//Controlla se ha aggiornato il contatore country
@@ -68,7 +68,7 @@ public class CassandraDAOTest extends TestCase {
 		cd.putUrl("statsTestA","www.statsTest.com");
 		cd.updateUrlStatistics("statsTestA", "IT", "127.0.0.1", Calendar.getInstance());
 		
-		Statistics st = cd.getStatistics("statsTestA");		
+		Statistics st = cd.getStatistics("statsTestA", Calendar.getInstance(), 0);		
 		Object[] cDay = st.getDayCounters().keySet().toArray();		
 		Object[] HDay = st.getHourCounters().keySet().toArray();	
 		//Controlla se è congruente il contatore country
