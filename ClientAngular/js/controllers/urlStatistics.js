@@ -81,7 +81,8 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
                         }
                     }
                     
-                    
+                    //sposta la vista verso il div
+                    $('html, body').animate({scrollTop:$('#statisticsDiv').position().top}, 'slow');
                     
                 })    
                 .error(function(response) {
@@ -92,23 +93,25 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
                 
                 $rootScope.notStatisticsView = false;
                 
-            } else {
-                //PULIZIA ELIMINANDO RIGHE AGGIUNTE ALLE TABELLE
-                var countryTableRows = document.getElementById("country-table-rows");
-                while (countryTableRows.firstChild) {
-                    countryTableRows.removeChild(countryTableRows.firstChild);
-                }
-                
-                var daysTableRows = document.getElementById("days-table-rows");
-                while (daysTableRows.firstChild) {
-                    daysTableRows.removeChild(daysTableRows.firstChild);
-                }
-                
-                $rootScope.notStatisticsView = true;
-            
             }
             
         }
+    }
+    
+    $scope.hideStatistics = function() {
+        
+        //PULIZIA ELIMINANDO RIGHE AGGIUNTE ALLE TABELLE
+        var countryTableRows = document.getElementById("country-table-rows");
+        while (countryTableRows.firstChild) {
+            countryTableRows.removeChild(countryTableRows.firstChild);
+        }
+
+        var daysTableRows = document.getElementById("days-table-rows");
+        while (daysTableRows.firstChild) {
+            daysTableRows.removeChild(daysTableRows.firstChild);
+        }
+        
+        $rootScope.notStatisticsView = true;
     }
     
 });
