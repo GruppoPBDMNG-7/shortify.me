@@ -13,7 +13,7 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
     /**Funzione per la richiesta delle informazioni riguardanti uno
     specifico shorturl e la visualizzazione del grafuico associato*/
     $rootScope.showStatistics = function(urlforstat) {
-        if (urlforstat != "" && urlforstat == null) {
+        if (urlforstat == "" || urlforstat == null) {
             return; //Campo non avvalorato
         } else {
             if($rootScope.notStatisticsView) {
@@ -21,6 +21,8 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
                 //Richiesta delle informazioni associate ad uno specifico shorturl
                 $http.post("http://localhost:4567/api/v1/stats", {shorturl: urlforstat})
                 .success(function(response) {
+                      
+                    $rootScope.error = false;
                     
                     //Ottengo dati per statistiche dalla response
                     var hourCounters = response.hourCounters;
@@ -80,19 +82,24 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
                             
                         }
                     }
+                               
+                    //visualizza le statistiche
+                    $rootScope.notStatisticsView = false;
                     
                     //sposta la vista verso il div
                     $('html, body').animate({scrollTop:$('#statisticsDiv').position().top}, 'slow');
-                    
+       
                 })    
                 .error(function(response) {
-                    console.log("Error");
-                    
+                    $rootScope.done = false;
+                    $rootScope.textError = response.error;
+                    document.getElementById("errorDiv").setAttribute("class", "alert alert-danger centeredText animated fadeIn");  
+                    $rootScope.error = true;               
                 });
-                
-                
-                $rootScope.notStatisticsView = false;
-                
+   
+                 //visualizza le statistiche
+                    $rootScope.notStatisticsView = false;
+                    
             }
             
         }

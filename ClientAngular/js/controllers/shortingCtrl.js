@@ -1,7 +1,7 @@
-app.controller('shortingCtrl', function($scope, $http, $timeout) {
+app.controller('shortingCtrl', function($scope, $rootScope, $http, $timeout) {
     
-    $scope.done = false;
-    $scope.error = false;
+    $rootScope.done = false;
+    $rootScope.error = false;
     
     $scope.customURLView = false;
     $scope.showSpinner = false;
@@ -16,7 +16,8 @@ app.controller('shortingCtrl', function($scope, $http, $timeout) {
         $scope.showSpinner = true;
         
         if (url != "" && url !=  null) {
-            $scope.error = false;
+            $rootScope.error = false;
+            $rootScope.notStatisticsView = true;
 
             //controllo per far scomparire il risultato di una conversione precedente
             if($scope.done) {
@@ -41,13 +42,13 @@ app.controller('shortingCtrl', function($scope, $http, $timeout) {
                     document.getElementById("resultDiv").setAttribute("class", "alert alert-success centeredText animated fadeIn");  
                     
                     $scope.showSpinner = false;
-                    $scope.done = true;
+                    $rootScope.done = true;
                 })
                 .error(function(response) {
-                    $scope.textError = response.error;
+                    $rootScope.textError = response.error;
                     document.getElementById("errorDiv").setAttribute("class", "alert alert-danger centeredText animated fadeIn");  
                     $scope.showSpinner = false;
-                    $scope.error = true;
+                    $rootScope.error = true;
                 });
             }, 1000);
             
