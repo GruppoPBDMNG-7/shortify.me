@@ -97,8 +97,6 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
                     $rootScope.error = true;               
                 });
    
-                 //visualizza le statistiche
-                    $rootScope.notStatisticsView = false;
                     
             }
             
