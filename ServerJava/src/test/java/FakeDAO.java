@@ -1,4 +1,4 @@
-package java;
+package test.java;
 import java.util.Calendar;
 import java.util.HashMap;
 
