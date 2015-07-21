@@ -1,3 +1,4 @@
+package java;
 import java.io.IOException;
 
 import com.maxmind.geoip2.exception.GeoIp2Exception;

@@ -1,3 +1,4 @@
+package java;
 import me.shortify.utils.filter.DomainChecker;
 import junit.framework.TestCase;
 

@@ -1,3 +1,4 @@
+package java;
 import me.shortify.utils.shortenerUrl.Algorithm;
 import junit.framework.TestCase;
 
