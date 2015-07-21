@@ -79,16 +79,21 @@ public class Services {
 
 	private static void setIspezioneUrl(ShortenerServices ss) {
 		post(API_CONTEXT + API.STATS, (request, response) -> {
-			String statistiche = "";
+			String result = "";
 			
 			try {
-				statistiche = ss.ispezionaURL(request.body());
+				result = ss.ispezionaURL(request.body());
 				
 			} catch (ShortURLNotFoundException e) {
+				System.err.println(e.getMessage());		
+				result = new Error(Error.SHORT_URL_NOT_EXISTS).toJsonString();
+				response.status(400);
+			} catch (BadURLException e) {
 				System.err.println(e.getMessage());
-				response.redirect("404.html");
+				result = new Error(Error.URL_NOT_SPECIFIED).toJsonString();
+				response.status(400);
 			}
-			return statistiche;
+			return result;
 		});
 	}
 	
