@@ -1,3 +1,4 @@
+package test.java;
 import me.shortify.utils.shortenerUrl.Algorithm;
 import junit.framework.TestCase;
 
@@ -23,7 +24,7 @@ public class AlgorithmTest extends TestCase {
 		//verifico che la stessa stringa con lettere diverse restituisca hashing diversi.
 		assertTrue("2 ERRORE HASH UGUALI",!su.buildShortUrl("https://www.reddit.com/r/GlobalOffensive/").equals(su.buildShortUrl("https://www.reddit.com/r/GlobalOffensive/")));
 	
-		//verifico che la stringa ha 8 caratteri con un url che ha più di 8 caratteri
+		//verifico che la stringa ha 8 caratteri con un url che ha piu' di 8 caratteri
 		assertTrue("3 ERRORE HASH DI LUNGHEZZA "+su.buildShortUrl("https://www.reddit.com/r/GlobalOffensive/").length(),
 				su.buildShortUrl("https://www.reddit.com/r/GlobalOffensive/").length() == maxSULength);
 		
