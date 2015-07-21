@@ -152,7 +152,11 @@ public class ShortenerServices {
 			
 		String[] urlParts = url.split("/");	
 		String shortUrl = urlParts[urlParts.length - 1];
-
+		
+		if (shortUrl.equals("")) {
+			throw new BadURLException("Url non inserito");
+		}
+		
 		if (!dao.checkUrl(shortUrl)) {
 			throw new ShortURLNotFoundException("Short URL non presente nel DB");
 		}

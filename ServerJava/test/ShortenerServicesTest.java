@@ -132,6 +132,7 @@ public class ShortenerServicesTest extends TestCase {
 	String casiTestIspezionaURL[] = {
 			"{shorturl:\"\"}",
 			"{shorturl:urlEsistente}",
+			"{shorturl:urlNonEsistente}",
 			//aggiungi qui nuovi casi di test
 			
 	};
@@ -139,6 +140,7 @@ public class ShortenerServicesTest extends TestCase {
 	String attesiIspezionaURL[] = {
 			"",
 			"{\"shortUrl\":\"urlEsistente\",\"hourCounters\":{},\"uniqueCounter\":0,\"longUrl\":\"long\",\"countryCounters\":{},\"dayCounters\":{}}",
+			"",
 			//aggiungi qui nuovi valori attesi
 	};
 	
@@ -154,6 +156,10 @@ public class ShortenerServicesTest extends TestCase {
 						+ " OTTENUTO: " + valoreOttenuto, 
 						valoreOttenuto.equals(attesiIspezionaURL[i]));
 			} catch (ShortURLNotFoundException e) {
+				if (i != 2) {
+					fail("CASO DI TEST: " + i + " Eccezione non prevista!");
+				}
+			} catch (BadURLException e) {
 				if (i != 0) {
 					fail("CASO DI TEST: " + i + " Eccezione non prevista!");
 				}
