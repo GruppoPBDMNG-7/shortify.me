@@ -4,6 +4,7 @@
   <artifactId>URLShortener</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <build>
+    <sourceDirectory>src</sourceDirectory>
     <plugins>
     	<plugin>
             <groupId>org.apache.maven.plugins</groupId>
