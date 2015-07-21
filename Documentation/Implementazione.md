@@ -74,3 +74,16 @@ Il server è stato sviluppato utilizzando il framework **Spark java** la cui sem
 La classe Bootstrap è l'entry point del server; la responsabilità principale consiste nel settaggio dei diversi *end points* e delle varie opzioni di configurazione del server.
 
 La cattura delle richieste inviate dal client avviene nella classe Services, che per ognuna di esse esegue i diversi servizi di shortening disponibili. Per seperare le responsabilità della cattura delle richieste, dell'invio delle risposte al client, con eventuali messaggi di errore, dalla responsabilità di eseguire i servizi di shortening, chiamando il DAO per l'accesso al database, si è sviluppata la classe ShortenerServices, cui istanza creata una sola volta in Services contiene il riferimento ad un oggetto che implementa il DAO.
+
+###Algoritmo per l'url shortener
+L'algoritmo è stato implementato in modo tale da dover restituire sempre una stringa che corrisponda a 8 caratteri. Questi non sono casuali ma scelti da una funzione di encoding basata sulla base 64. L'encoding è composto dai caratteri : [a-z], [A-Z], [0-9], +, /.
+<br>Il punto di partenza dell'algoritmo è il long url. Si prendono 8 caratteri random di esso e poi si fa l'encoding. La scelta di prendere questi caratteri random è risultata necessaria perchè, così facendo, si evitano conflitti tra utenti che vorrebbero creare uno short url partendo dallo stesso long url.
+
+###Geolocalizzazione
+La classe CountryIPInformation è stata utilizzata per poter trovare la nazione corrispondente ad un determinato ip. Utilizza un database che memorizza i vari range di ip attribuiti ad ogni nazione. In caso l'ip non corrispondesse a nessuna nazione viene restituita una stringa vuota.Abbiamo ritenuto necessaria questa funzionalità per i fini statistici del sistema.
+
+###Controllo sulle parole
+La classe WordChecker è stata utilizzata per fare filtro su parole non idonee al contesto come turpiloqui. Il filtro agisce sui custom url dove l'utente potrebbe inserire questa tipologia di parole. Agisce su 17 tipi di linguaggio la maggior parte europei.
+
+###Controllo sui domini
+La classe DomainChecker è stata utilizzata per fare filtro su domini che potrebbero risultare malevoli e utilizzati per fini diversi da quelli che il servizio tende a fornire. Il controllo è basato su una lista che rappresenta domini "high sensibility".
