@@ -13,7 +13,7 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
     /**Funzione per la richiesta delle informazioni riguardanti uno
     specifico shorturl e la visualizzazione del grafuico associato*/
     $rootScope.showStatistics = function(urlforstat) {
-        if (urlforstat == null) {
+        if (urlforstat != "" && urlforstat == null) {
             return; //Campo non avvalorato
         } else {
             if($rootScope.notStatisticsView) {
