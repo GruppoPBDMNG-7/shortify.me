@@ -1,7 +1,9 @@
 package me.shortify.sparkserver;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.text.Normalizer;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -49,16 +51,25 @@ public class ShortenerServices {
 		
 		DomainChecker dc = new DomainChecker();	
 		if (!dc.isBadDomain(url)) {
-			String customText;
+			String customText = "";
     		String shortUrl = "";
     		
     		try {
     			
     			//se e' stato inserito un custom text
     			customText = jsonObject.getString("customText");
+    			//codificato in UTF-8 e normalizzato togliendo spazi bianchi e lettere accentate.
+    			String tempText = new String(customText.getBytes("ISO-8859-1"), "UTF-8");
+    			customText = Normalizer.normalize(tempText, Normalizer.Form.NFD)
+    					.replaceAll("\\s+","")
+    					.replaceAll("\\p{InCombiningDiacriticalMarks}|[^\\w\\s]", "");
+    			
     		} catch(JSONException e) {
     			customText = "";
-    		}
+    		} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     		
     		//reset json di risposta
     		jsonObject = new JSONObject();
