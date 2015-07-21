@@ -1,7 +1,7 @@
 #Test
 
 
-Abbiamo sostenuto vari test di tipo whitebox per quanto riguarda le seguenti classi:
+Abbiamo sostenuto vari test per quanto riguarda le seguenti classi:
 
 
 #####1.  Algorithm (pkg: me.shortify.utils.shortenerUrl) testando il metodo 
