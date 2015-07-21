@@ -18,6 +18,9 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
         } else {
             if($rootScope.notStatisticsView) {
                 
+                //visualizza le statistiche
+                $rootScope.notStatisticsView = false;
+                
                 //Richiesta delle informazioni associate ad uno specifico shorturl
                 $http.post("http://localhost:4567/api/v1/stats", {shorturl: urlforstat})
                 .success(function(response) {
@@ -83,8 +86,7 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
                         }
                     }
                                
-                    //visualizza le statistiche
-                    $rootScope.notStatisticsView = false;
+                  
                     
                     //sposta la vista verso il div
                     $('html, body').animate({scrollTop:$('#statisticsDiv').position().top}, 'slow');
@@ -95,6 +97,8 @@ app.controller('urlStatistics', function($scope, $rootScope, $http) {
                     $rootScope.textError = response.error;
                     document.getElementById("errorDiv").setAttribute("class", "alert alert-danger centeredText animated fadeIn");  
                     $rootScope.error = true;               
+                    $rootScope.notStatisticsView = true;
+
                 });
    
                     
