@@ -87,3 +87,14 @@ La classe WordChecker è stata utilizzata per fare filtro su parole non idonee a
 
 ###Controllo sui domini
 La classe DomainChecker è stata utilizzata per fare filtro su domini che potrebbero risultare malevoli e utilizzati per fini diversi da quelli che il servizio tende a fornire. Il controllo è basato su una lista che rappresenta domini "high sensibility".
+
+###Client
+Il client è stato realizzato in HTML e javascript. È stato utilizzato il framework AngularJS, scritto in javascript, per la realizzazione dei controlli e l'invio delle richieste GET e POST al server. 
+
+Le funzionalità principali si trovano all'interno di due file .js, *shortingCtrl* e *urlStatistics*, che sono rispettivamente due *controller* di Angular, uno che gestisce la richiesta al server per la conversione di un URL, l'altro che gestisce la richiesta e la visualizzazione delle statistiche di un certo short url. 
+
+Il client si compone solamente di due pagine HTML, la index in cui sono presenti tutti i controlli, come una **single page application**, e la pagina 404.html a cui si viene indirizzati se il server non trova lo short url richiesto.
+
+Per il disegno dei grafici si è utilizzata la libreria *Angular Chart*.
+
+Per la grafica si è utlizzato il CSS fornito da *Twitter Bootstrap*. 
