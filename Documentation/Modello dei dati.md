@@ -13,3 +13,4 @@ Nel database, quindi, ogni riga è uno short URL; una volta che ne viene richies
 - una column family contenente un contatore delle visite uniche, ovvero il numero di visite effettuate da utenti distinti;
 - una column family contenente una lista di ip che hanno visitato l'url, a supporto del contatore delle visite uniche. Ogni colonna contiene un ip.
 
+**Nota**: un gran numero di column family potrebbe minare le performance del db come spiegato [qui](http://hbase.apache.org/0.94/book/number.of.cfs.html)
