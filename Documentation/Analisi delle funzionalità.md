@@ -14,7 +14,7 @@ La funzionalità di ispezione di uno short URL comprende sia la visualizzazione 
 ##Frequenza delle funzionalità
 Ognuna delle funzionalità appena descritte viene eseguita con un certo livello di frequenza, utile a determinare la priorità da assegnare nello studio del modello da implementare.
 
-Si può assumere con buona proabilità che l'operazione eseguita più spesso è quella di visita di uno short URL: nel corso della sua vita un solo short URL potrebbe accumulare milioni di visualizzazioni.
+Si può assumere con buona probabilità che l'operazione eseguita più spesso è quella di visita di uno short URL: nel corso della sua vita un solo short URL potrebbe accumulare milioni di visualizzazioni.
 
 Anche la creazione di un nuovo short URL è una operazione sufficientemente frequente, specialmente quando si devono condividere su social network come Twitter, dove si rivelano di vitale importanza.
 
